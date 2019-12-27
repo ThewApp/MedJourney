@@ -11,7 +11,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v1
-    - run: cd functions && npm install
+    - name: Install functions typescript
+      run: |
+        cd functions
+        npm i tslint typescript
     - name: Deploy to Prod Firebase
       if: github.ref == 'refs/heads/master'
       uses: w9jds/firebase-action@v1.1.0
