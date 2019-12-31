@@ -5,6 +5,8 @@ on:
       - dev
     paths-ignore:
       - functions/**
+      - '*'
+      - '!firebase.json'
 
 jobs:
   deploy:
