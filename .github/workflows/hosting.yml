@@ -7,8 +7,6 @@ on:
       - functions/**
 
 jobs:
-  test:
-
   deploy:
     runs-on: ubuntu-latest
     steps:
