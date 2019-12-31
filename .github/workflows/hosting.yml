@@ -9,10 +9,25 @@ on:
       - '!firebase.json'
 
 jobs:
+  test:
+    runs-on: ubuntu-latest
+    - name: Prettier check gatsby
+      run: |
+        cd gatsby
+        npm ci
+        npx prettier --check
+
   deploy:
     runs-on: ubuntu-latest
+    needs: test
     steps:
     - uses: actions/checkout@v1
+    - name: Build gatsby
+      run: |
+        cd gatsby
+        npm ci
+        npm run build
+        mv public ../public
     - name: Deploy to Prod Firebase Hosting
       if: github.ref == 'refs/heads/master'
       uses: w9jds/firebase-action@v1.1.0
