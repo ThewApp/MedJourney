@@ -1,33 +1,31 @@
-name: CI
-
 on:
   push:
     branches:
       - master
       - dev
+    paths-ignore:
+      - functions/**
 
 jobs:
+  test:
+
   deploy:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v1
-    - name: Install functions typescript
-      run: |
-        cd functions
-        npm i tslint typescript
-    - name: Deploy to Prod Firebase
+    - name: Deploy to Prod Firebase Hosting
       if: github.ref == 'refs/heads/master'
       uses: w9jds/firebase-action@v1.1.0
       with:
-        args: deploy
+        args: deploy --only hosting
       env:
         FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
         PROJECT_ID: ${{ secrets.PROJECT_ID }}
-    - name: Deploy to Stg Firebase
+    - name: Deploy to Stg Firebase Hosting
       if: github.ref == 'refs/heads/dev'
       uses: w9jds/firebase-action@v1.1.0
       with:
-        args: deploy
+        args: deploy --only hosting
       env:
         FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
         PROJECT_ID: ${{ secrets.PROJECT_ID_STG }}

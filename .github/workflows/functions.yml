@@ -1,0 +1,34 @@
+on:
+  push:
+    branches:
+      - master
+      - dev
+    paths:
+      - functions/**
+      - firebase.json
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1
+    - name: Install functions eslint
+      run: |
+        cd functions
+        npm i eslint eslint-plugin-promise
+    - name: Deploy to Prod Firebase Functions
+      if: github.ref == 'refs/heads/master'
+      uses: w9jds/firebase-action@v1.1.0
+      with:
+        args: deploy --only functions
+      env:
+        FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+        PROJECT_ID: ${{ secrets.PROJECT_ID }}
+    - name: Deploy to Stg Firebase Functions
+      if: github.ref == 'refs/heads/dev'
+      uses: w9jds/firebase-action@v1.1.0
+      with:
+        args: deploy --only functions
+      env:
+        FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+        PROJECT_ID: ${{ secrets.PROJECT_ID_STG }}
