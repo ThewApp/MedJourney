@@ -17,9 +17,9 @@ jobs:
     steps:
       - uses: actions/checkout@v1
       - run: npm ci
-        working-directory: "{{ env.WORKING_DIRECTORY }}"
+        working-directory: ${{ env.WORKING_DIRECTORY }}
       - run: npx prettier --check "**/*.{js,jsx,json,md}"
-        working-directory: "{{ env.WORKING_DIRECTORY }}"
+        working-directory: ${{ env.WORKING_DIRECTORY }}
 
   deploy:
     runs-on: ubuntu-latest
