@@ -17,7 +17,7 @@ jobs:
         run: |
           cd gatsby
           npm ci
-          npx prettier --check
+          npx prettier --check "**/*.{js,jsx,json,md}"
 
   deploy:
     runs-on: ubuntu-latest
