@@ -26,12 +26,12 @@ jobs:
     needs: test
     steps:
       - uses: actions/checkout@v1
-      - name: Build gatsby
-        run: |
-          cd gatsby
-          npm ci
-          npm run build
-          mv public ../public
+      - run: npm ci
+        working-directory: ${{ env.WORKING_DIRECTORY }}
+      - run: npm run build
+        working-directory: ${{ env.WORKING_DIRECTORY }}
+      - run: mv public ../public
+        working-directory: ${{ env.WORKING_DIRECTORY }}
       - name: Deploy to Prod Firebase Hosting
         if: github.ref == 'refs/heads/master'
         uses: w9jds/firebase-action@v1.1.0
