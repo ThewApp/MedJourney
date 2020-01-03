@@ -6,7 +6,7 @@
 
 import React from "react";
 
-export const onRenderBody = ({ setPostBodyComponents }) => {
+export const onRenderBody = ({ setHeadComponents, setPostBodyComponents }) => {
   setHeadComponents([
     <link
       key="googletagmanager"
