@@ -7,6 +7,18 @@
 import React from "react";
 
 export const onRenderBody = ({ setPostBodyComponents }) => {
+  setHeadComponents([
+    <link
+      key="googletagmanager"
+      rel="preconnect"
+      href="https://www.googletagmanager.com"
+    ></link>,
+    <link
+      key="firebaseinstallations"
+      rel="preconnect"
+      href="https://firebaseinstallations.googleapis.com"
+    ></link>
+  ]);
   setPostBodyComponents([
     <script
       key="firebase-app"
