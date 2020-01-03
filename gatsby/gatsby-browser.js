@@ -4,12 +4,13 @@
  * See: https://www.gatsbyjs.org/docs/browser-apis/
  */
 
+import getFirebase from "./src/firebase";
+
 export const onRouteUpdate = ({ prevLocation }) => {
   if (!prevLocation) {
-    /* global firebase */
-    firebase.analytics();
+    getFirebase(firebase => firebase.analytics());
   } else {
     // https://github.com/gatsbyjs/gatsby/blob/master/packages/gatsby-plugin-google-analytics/src/gatsby-browser.js#L24
-    setTimeout(() => firebase.analytics().logEvent("page_view"), 32);
+    setTimeout(() => getFirebase(firebase => firebase.analytics().logEvent("page_view")), 32);
   }
 };
