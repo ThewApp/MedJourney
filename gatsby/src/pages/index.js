@@ -15,14 +15,12 @@ const IndexPage = () => (
       <div className="max-w-sm rounded overflow-hidden shadow-md mx-4">
         <div className="px-6 py-2 md:py-4">
           <div className="font-bold text-xl mb-1">วันที่</div>
-          <p className="text-gray-700">
-          🗓 21 - 22 มีนาคม 2563
-          </p>
+          <p className="text-gray-700">🗓 21 - 22 มีนาคม 2563</p>
         </div>
         <div className="px-6 py-2 md:py-4">
           <div className="font-bold text-xl mb-1">สถานที่</div>
           <p className="text-gray-700">
-          📍 อาคารแพทยพัฒน์ คณะแพทยศาสตร์ จุฬาลงกรณ์มหาวิทยาลัย
+            📍 อาคารแพทยพัฒน์ คณะแพทยศาสตร์ จุฬาลงกรณ์มหาวิทยาลัย
           </p>
         </div>
       </div>

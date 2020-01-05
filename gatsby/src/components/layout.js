@@ -28,9 +28,7 @@ const Layout = ({ children }) => {
   return (
     <div className="antialiased">
       <Header siteTitle={data.site.siteMetadata.title} />
-      <main>
-        {children}
-      </main>
+      <main>{children}</main>
       <Footer facebook={data.site.siteMetadata.facebook} />
     </div>
   );
