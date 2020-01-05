@@ -1,8 +1,10 @@
 module.exports = {
   siteMetadata: {
     title: `MDCU Open House 2020 : MedJourney`,
-    description: `Coming soon.. 🎈`,
-    author: `@mdcuopenhouse`
+    shortTitle: `MedJourney`,
+    description: `กิจกรรมสุดพิเศษ 2 วันเต็ม ที่จะทำให้ทุก ๆ คนได้รู้ลึก รู้จริง รู้ทุกเรื่องเกี่ยวกับคณะแพทย์ จุฬาฯ รับรองว่าหาจากที่ไหนไม่ได้อีกแน่นอน`,
+    author: `@mdcuopenhouse`,
+    facebook: `https://facebook.com/mdcuopenhouse`
   },
   plugins: [
     `gatsby-plugin-postcss`,
@@ -22,8 +24,8 @@ module.exports = {
         name: `MDCU Open House 2020 : MedJourney`,
         short_name: `MedJourney`,
         start_url: `/`,
-        background_color: `#663399`,
-        theme_color: `#663399`,
+        background_color: `#a8301a`,
+        theme_color: `#5f1b1f`,
         display: `minimal-ui`,
         icon: `src/images/gatsby-icon.png` // This path is relative to the root of the site.
       }
