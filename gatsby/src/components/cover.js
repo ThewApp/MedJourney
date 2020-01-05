@@ -18,7 +18,7 @@ const Cover = () => {
     query {
       coverImage: file(relativePath: { eq: "cover.png" }) {
         childImageSharp {
-          fluid(quality: 90, toFormat: JPG, srcSetBreakpoints: [200]) {
+          fluid(quality: 75, toFormat: JPG) {
             ...GatsbyImageSharpFluid
           }
         }
