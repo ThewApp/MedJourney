@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import getFirebase from ".";
+import { getFirebase } from ".";
 
 export default function() {
   const [auth, setAuth] = useState();

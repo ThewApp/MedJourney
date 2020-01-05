@@ -1,27 +1,40 @@
-let firebase;
+class Firebase {
+  constructor() {
+    this.q = [];
+  }
 
-if (typeof window !== "undefined") {
-  const app = import("firebase/app");
-  const init = fetch("/__/firebase/init.json").then(res => res.json());
-  const analytics = import("firebase/analytics");
-  const auth = import("firebase/auth");
-  Promise.all([app, init, analytics, auth]).then(([app, init]) => {
-    app.initializeApp(init);
-    firebase = app;
-  });
-}
-
-export default function getFirebase(callback) {
-  if (typeof window !== "undefined") {
-    if (!firebase) {
-      setTimeout(() => getFirebase(callback), 16);
-    } else {
-      callback(firebase);
+  init() {
+    if (typeof window !== "undefined") {
+      const app = import(/* webpackPreload: false */ "firebase/app");
+      const init = fetch("/__/firebase/init.json").then(res => res.json());
+      Promise.all([app, init]).then(async ([app, init]) => {
+        app.initializeApp(init);
+        /* eslint-disable */
+        await import(/* webpackPreload: false */ "firebase/analytics");
+        await import(/* webpackPreload: false */ "firebase/auth");
+        await import(/* webpackPreload: false */ "firebase/firestore");
+        await import(/* webpackPreload: false */ "firebase/remote-config");
+        /* eslint-enable */
+        this.app = app;
+        this.q.forEach(callback => callback(this.app));
+      });
     }
-  } else {
-    callback();
+  }
+
+  getFirebase(callback, thisArg) {
+    if (typeof window !== "undefined") {
+      if (!this.app) {
+        this.q.push(callback.bind(thisArg));
+      } else {
+        callback.bind(thisArg)(this.app);
+      }
+    }
   }
 }
+
+const firebase = new Firebase();
+firebase.init();
+export const getFirebase = firebase.getFirebase.bind(firebase);
 
 export { default as useAnalytics } from "./useAnalytics";
 export { default as useAuth } from "./useAuth";
