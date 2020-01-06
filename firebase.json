@@ -1,11 +1,4 @@
 {
-  "functions": {
-    "predeploy": [
-      "npm --prefix \"$RESOURCE_DIR\" run lint",
-      "npm --prefix \"$RESOURCE_DIR\" run build"
-    ],
-    "source": "functions"
-  },
   "emulators": {
     "functions": {
       "port": 5001
@@ -16,5 +9,41 @@
     "hosting": {
       "port": 5000
     }
+  },
+  "hosting": {
+    "public": "public",
+    "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
+    "headers": [
+      {
+        "source": "/**/*.@(js|css)",
+        "headers": [
+          {
+            "key": "Cache-Control",
+            "value": "public, max-age=31536000"
+          }
+        ]
+      },
+      {
+        "source": "/{static,icons}/**",
+        "headers": [
+          {
+            "key": "Cache-Control",
+            "value": "public, max-age=31536000"
+          }
+        ]
+      },
+      {
+        "source": "page-data/**",
+        "headers": [
+          {
+            "key": "Cache-Control",
+            "value": "public, max-age=0"
+          }
+        ]
+      }
+    ]
+  },
+  "functions": {
+    "predeploy": ["npm --prefix \"$RESOURCE_DIR\" run lint"]
   }
 }
