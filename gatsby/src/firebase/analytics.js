@@ -8,7 +8,7 @@ class Amplitude {
   init() {
     if (typeof window !== "undefined") {
       import("amplitude-js").then(amplitude => {
-        amplitude.getInstance().init("e68677dad0052827470798d8204e7959");
+        amplitude.getInstance().init(process.env.GATSBY_API_AMPLITUDE);
         this.amplitude = amplitude;
         this.q.forEach(callback => callback(this.amplitude));
       });
