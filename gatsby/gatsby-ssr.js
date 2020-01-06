@@ -19,11 +19,6 @@ export const onRenderBody = ({ setHeadComponents, setPostBodyComponents }) => {
       key="firebaseinstallations"
       rel="preconnect"
       href="https://firebaseinstallations.googleapis.com"
-    ></link>,
-    <link
-      key="googletagmanager"
-      rel="preconnect"
-      href="https://www.googletagmanager.com"
     ></link>
   ]);
 };
