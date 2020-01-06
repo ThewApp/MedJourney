@@ -1,9 +1,5 @@
 import { getFirebase } from ".";
 
-getFirebase(firebase => {
-  firebase.analytics();
-});
-
 class Amplitude {
   constructor() {
     this.q = [];
@@ -28,23 +24,39 @@ class Amplitude {
       }
     }
   }
+
+  logPageView() {
+    this.getAmplitude(amplitude =>
+      amplitude.getInstance().logEvent("page_view", {
+        title: document.title,
+        path:
+          window.location.pathname +
+          window.location.search +
+          window.location.hash
+      })
+    );
+  }
 }
 
 const amplitude = new Amplitude();
-amplitude.init();
 export const getAmplitude = amplitude.getAmplitude.bind(amplitude);
 
-getAmplitude(amplitude =>
-  window.addEventListener("load", () =>
-    amplitude.getInstance().logEvent("page_view", { title: document.title })
-  )
-);
+export function initAnalytics() {
+  getFirebase(firebase => {
+    import("firebase/analytics").then(() => {
+      firebase.analytics();
+    });
+    import("firebase/performance").then(() => {
+      firebase.performance();
+    });
+  });
+  amplitude.init();
+  amplitude.logPageView();
+}
 
 export function logPageView() {
   getFirebase(firebase => {
     firebase.analytics().logEvent("page_view");
   });
-  getAmplitude(amplitude =>
-    amplitude.getInstance().logEvent("page_view", { title: document.title })
-  );
+  amplitude.logPageView();
 }

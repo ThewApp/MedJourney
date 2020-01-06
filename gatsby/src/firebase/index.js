@@ -10,7 +10,6 @@ class Firebase {
       Promise.all([app, init]).then(async ([app, init]) => {
         app.initializeApp(init);
         /* eslint-disable */
-        await import(/* webpackPreload: false */ "firebase/analytics");
         await import(/* webpackPreload: false */ "firebase/auth");
         await import(/* webpackPreload: false */ "firebase/firestore");
         await import(/* webpackPreload: false */ "firebase/remote-config");

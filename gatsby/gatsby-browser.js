@@ -4,7 +4,11 @@
  * See: https://www.gatsbyjs.org/docs/browser-apis/
  */
 
-import { logPageView } from "./src/firebase/analytics";
+import { logPageView, initAnalytics } from "./src/firebase/analytics";
+
+export const onInitialClientRender = () => {
+  initAnalytics();
+};
 
 export const onRouteUpdate = ({ prevLocation }) => {
   if (prevLocation) {
