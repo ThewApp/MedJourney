@@ -48,12 +48,12 @@ jobs:
         if: github.ref == 'refs/heads/master'
         env:
           GATSBY_API_AMPLITUDE: ${{ secrets.GATSBY_API_AMPLITUDE }}
+        working-directory: ${{ env.WORKING_DIRECTORY }}
       - name: Build Stg
         run: npm run build
         if: github.ref == 'refs/heads/dev'
         env:
           GATSBY_API_AMPLITUDE: ${{ secrets.GATSBY_API_AMPLITUDE_STG }}
-        working-directory: ${{ env.WORKING_DIRECTORY }}
         working-directory: ${{ env.WORKING_DIRECTORY }}
       - run: mv public ../public
         working-directory: ${{ env.WORKING_DIRECTORY }}
