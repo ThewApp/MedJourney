@@ -9,11 +9,9 @@ class Firebase {
       const init = fetch("/__/firebase/init.json").then(res => res.json());
       Promise.all([app, init]).then(async ([app, init]) => {
         app.initializeApp(init);
-        /* eslint-disable */
         await import(/* webpackPreload: false */ "firebase/auth");
         await import(/* webpackPreload: false */ "firebase/firestore");
         await import(/* webpackPreload: false */ "firebase/remote-config");
-        /* eslint-enable */
         this.app = app;
         this.q.forEach(callback => callback(this.app));
       });
@@ -37,3 +35,4 @@ export const getFirebase = firebase.getFirebase.bind(firebase);
 
 export { default as useAnalytics } from "./useAnalytics";
 export { default as useAuth } from "./useAuth";
+export { default as useFunctions } from "./useFunctions";
