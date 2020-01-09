@@ -11,7 +11,7 @@ const LegacyLoginPage = ({ location }) => {
   const functions = useFunctions();
   const { register, handleSubmit, watch, errors } = useForm();
   const onSubmit = data => {
-    const registerLegacy = functions().httpsCallable("registerLegacy");
+    const registerLegacy = functions("asia-east2").httpsCallable("registerLegacy");
     registerLegacy(data).then(result => {
       console.log(result);
     });
