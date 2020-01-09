@@ -5,10 +5,10 @@ import { getFirebase } from ".";
  * @return {firebase.auth}
  */
 export default function() {
-  const [auth, setAuth] = useState({value: null});
+  const [auth, setAuth] = useState({ value: null });
   useEffect(() => {
     getFirebase(firebase => {
-      setAuth({value: firebase.auth});
+      setAuth({ value: firebase.auth });
     });
   }, []);
   return auth.value;
