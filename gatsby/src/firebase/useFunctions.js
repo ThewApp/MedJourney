@@ -9,12 +9,7 @@ export default function() {
   useEffect(() => {
     getFirebase(firebase => {
       import("firebase/functions").then(() => {
-        if (process.env.NODE_ENV === "development") {
-          firebase.functions().useFunctionsEmulator("http://localhost:5001");
-          setFunctions({ value: () => firebase.app().functions() });
-        } else {
-          setFunctions({ value: region => firebase.app().functions(region) });
-        }
+        setFunctions({ value: firebase.app().functions.bind(firebase.app()) });
       });
     });
   }, []);

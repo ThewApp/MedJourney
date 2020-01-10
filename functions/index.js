@@ -32,7 +32,7 @@ exports.legacyLogin = functions
             })
         ]);
       })
-      .then(customToken => ({
+      .then(([customToken]) => ({
         token: customToken
       }));
   });
