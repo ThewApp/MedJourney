@@ -20,9 +20,7 @@ const RegisterPage = ({ location }) => {
   return (
     <Layout>
       <SEO title="ลงทะเบียน" />
-      <div
-        className="w-full max-w-md mx-auto md:shadow-md rounded p-3 sm:p-6 md:p-8 mt-16 mb-32"
-      >
+      <div className="w-full max-w-md mx-auto md:shadow-md rounded p-3 sm:p-6 md:p-8 mt-16 mb-32">
         <h1 className="font-bold text-lg mb-4">กรอกข้อมูลส่วนตัว</h1>
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="mb-4">
