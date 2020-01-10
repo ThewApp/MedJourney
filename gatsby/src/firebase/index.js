@@ -35,4 +35,5 @@ export const getFirebase = firebase.getFirebase.bind(firebase);
 
 export { default as useAnalytics } from "./useAnalytics";
 export { default as useAuth } from "./useAuth";
+export { default as useFirestore } from "./useFirestore";
 export { default as useFunctions } from "./useFunctions";

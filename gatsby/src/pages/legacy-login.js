@@ -1,21 +1,38 @@
 import React from "react";
-import { Link } from "gatsby";
+import { Link, navigate } from "gatsby";
 
 import Layout from "../components/layout";
 import SEO from "../components/seo";
 import { useAuth, useFunctions } from "../firebase";
 import { useForm } from "react-hook-form";
+import queryString from "query-string";
 
 const LegacyLoginPage = ({ location }) => {
   const auth = useAuth();
   const functions = useFunctions();
-  const { register, handleSubmit, watch, errors } = useForm();
+  const { register, handleSubmit, errors } = useForm();
+
+  const redirectUrl =
+    queryString.parse(location.search).redirect || "/register";
+
+  if (auth) {
+    const authListener = auth().onAuthStateChanged(function(user) {
+      if (user) {
+        navigate(redirectUrl, { replace: true });
+      }
+    });
+    if (auth().currentUser) {
+      authListener();
+      navigate(redirectUrl, { replace: true });
+    }
+  }
+
   const onSubmit = data => {
     const registerLegacy = functions("asia-east2").httpsCallable(
-      "registerLegacy"
+      "legacyLogin"
     );
     registerLegacy(data).then(result => {
-      console.log(result);
+      auth().signInWithCustomToken(result.token);
     });
   };
 
@@ -61,18 +78,15 @@ const LegacyLoginPage = ({ location }) => {
           </div>
 
           <div className="flex items-center justify-between">
+            <Link to="/login" className="text-sm text-gray-600 align-baseline">
+              ลงทะเบียนด้วย Facebook
+            </Link>
             <button
               className="my-2 bg-primary-600 hover:bg-primary-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
               type="submit"
             >
               ลงทะเบียน
             </button>
-            <Link
-              to="/login"
-              className="text-sm text-gray-600 text-right align-baseline"
-            >
-              ลงทะเบียนด้วย Facebook
-            </Link>
           </div>
         </form>
       </div>
