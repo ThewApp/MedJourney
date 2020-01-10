@@ -1,19 +1,18 @@
-import React, { useState } from "react";
-import { Link, navigate } from "gatsby";
+import React from "react";
+import { navigate } from "gatsby";
 
 import Layout from "../components/layout";
 import SEO from "../components/seo";
-import { useAuth, useFirestore } from "../firebase";
+import { useAuth } from "../firebase";
 import { useForm } from "react-hook-form";
 
 const RegisterPage = ({ location }) => {
   const auth = useAuth();
-  const firestore = useFirestore();
   if (auth && !auth().currentUser) {
     auth().signOut();
     navigate("/login");
   }
-  const { register, handleSubmit, watch, errors } = useForm();
+  const { register, handleSubmit, errors } = useForm();
   const onSubmit = data => {
     console.log(data);
   };
@@ -21,7 +20,9 @@ const RegisterPage = ({ location }) => {
   return (
     <Layout>
       <SEO title="ลงทะเบียน" />
-      <div tabIndex="5" className="w-full max-w-md mx-auto md:shadow-md rounded p-3 sm:p-6 md:p-8 mt-16 mb-32">
+      <div
+        className="w-full max-w-md mx-auto md:shadow-md rounded p-3 sm:p-6 md:p-8 mt-16 mb-32"
+      >
         <h1 className="font-bold text-lg mb-4">กรอกข้อมูลส่วนตัว</h1>
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="mb-4">

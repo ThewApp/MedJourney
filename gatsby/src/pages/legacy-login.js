@@ -28,9 +28,7 @@ const LegacyLoginPage = ({ location }) => {
   }
 
   const onSubmit = data => {
-    const registerLegacy = functions("asia-east2").httpsCallable(
-      "legacyLogin"
-    );
+    const registerLegacy = functions("asia-east2").httpsCallable("legacyLogin");
     registerLegacy(data).then(result => {
       auth().signInWithCustomToken(result.token);
     });
