@@ -35,7 +35,10 @@ const IndexPage = () => (
       </div>
     </div>
     <div className="text-center py-24 md:py-40 px-4">
-      <h2 className="text-2xl md:text-4xl">เปิดลงทะเบียน <span className="whitespace-no-wrap">ปลายเดือนกุมภาฯ นี้</span></h2>
+      <h2 className="text-2xl md:text-4xl">
+        เปิดลงทะเบียน{" "}
+        <span className="whitespace-no-wrap">ปลายเดือนกุมภาฯ นี้</span>
+      </h2>
     </div>
   </Layout>
 );
