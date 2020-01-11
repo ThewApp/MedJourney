@@ -13,12 +13,40 @@ exports.legacyLogin = functions
       data.thaiId.length === 0 ||
       !(typeof data.birthday === "string" || data.birthday.length === 0)
     ) {
-      throw new functions.https.HttpsError("invalid-data");
+      throw new functions.https.HttpsError("invalid-argument");
     }
-    return admin
+
+    const usersDomain = "users.mdcuopenhouse.docchula.com";
+
+    const getUser = admin
+      .auth()
+      .getUserByEmail(`${data.thaiId}@${usersDomain}`)
+      .then(userRecord =>
+        admin
+          .firestore()
+          .doc("users/" + userRecord.uid)
+          .get()
+      )
+      .then(
+        doc => {
+          if (data.birthday === doc.get("birthday")) {
+            return admin.auth().createCustomToken(doc.id);
+          } else {
+            throw new functions.https.HttpsError(
+              "unauthenticated",
+              "wrong-birthday"
+            );
+          }
+        },
+        error => {
+          if (error.code !== "auth/user-not-found") throw error;
+        }
+      );
+
+    const createUser = admin
       .auth()
       .createUser({
-        email: `${data.thaiId}@user.mdcuopenhouse.docchula.com`
+        email: `${data.thaiId}@${usersDomain}`
       })
       .then(userRecord => {
         return Promise.all([
@@ -32,7 +60,16 @@ exports.legacyLogin = functions
             })
         ]);
       })
-      .then(([customToken]) => ({
-        token: customToken
-      }));
+      .then(
+        ([customToken]) => customToken,
+        error => {
+          if (error.code !== "auth/email-already-exists") throw error;
+        }
+      );
+
+    return Promise.all([getUser, createUser]).then(
+      ([userToken, newUserToken]) => {
+        return { token: userToken || newUserToken };
+      }
+    );
   });

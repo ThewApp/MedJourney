@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link, navigate } from "gatsby";
 
 import Layout from "../components/layout";
@@ -10,7 +10,9 @@ import queryString from "query-string";
 const LegacyLoginPage = ({ location }) => {
   const auth = useAuth();
   const functions = useFunctions();
-  const { register, handleSubmit, errors } = useForm();
+  const { register, handleSubmit, errors, setError } = useForm();
+
+  const [submitting, setSubmitting] = useState(false);
 
   const redirectUrl =
     queryString.parse(location.search).redirect || "/register";
@@ -28,10 +30,19 @@ const LegacyLoginPage = ({ location }) => {
   }
 
   const onSubmit = data => {
+    setSubmitting(true);
     const registerLegacy = functions("asia-east2").httpsCallable("legacyLogin");
-    registerLegacy(data).then(result => {
-      auth().signInWithCustomToken(result.data.token);
-    });
+    registerLegacy(data).then(
+      result => {
+        auth().signInWithCustomToken(result.data.token);
+      },
+      error => {
+        if ((error.message = "wrong-birthday")) {
+          setSubmitting(false);
+          setError("birthday", "wrong-birthday", "ไม่ถูกต้อง");
+        }
+      }
+    );
   };
 
   return (
@@ -71,7 +82,9 @@ const LegacyLoginPage = ({ location }) => {
               ref={register({ required: true })}
             />
             {errors.birthday && (
-              <span className="text-sm text-primary-400">จำเป็นต้องใส่</span>
+              <span className="text-sm text-primary-400">
+                {errors.birthday.message || "จำเป็นต้องใส่"}
+              </span>
             )}
           </div>
 
@@ -80,8 +93,12 @@ const LegacyLoginPage = ({ location }) => {
               ลงทะเบียนด้วย Facebook
             </Link>
             <button
-              className="my-2 bg-primary-600 hover:bg-primary-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+              className={
+                "my-2 bg-primary-600 hover:bg-primary-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" +
+                (submitting ? " opacity-50 cursor-not-allowed" : "")
+              }
               type="submit"
+              disabled={submitting}
             >
               ลงทะเบียน
             </button>
