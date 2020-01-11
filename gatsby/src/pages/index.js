@@ -8,7 +8,7 @@ const IndexPage = () => (
   <Layout>
     <SEO title="Home" />
     <Cover />
-    <div className="container mx-auto flex flex-col sm:flex-row items-center justify-center my-6">
+    <div className="container mx-auto flex flex-col sm:flex-row items-center justify-center mt-6">
       <p className="max-w-sm mx-4 my-6">
         กิจกรรมสุดพิเศษ 2 วันเต็ม ที่จะทำให้ทุก ๆ คนได้รู้ลึก รู้จริง
         รู้ทุกเรื่องเกี่ยวกับคณะแพทย์ จุฬาฯ รับรองว่าหาจากที่ไหนไม่ได้อีกแน่นอน
@@ -33,6 +33,9 @@ const IndexPage = () => (
           </p>
         </div>
       </div>
+    </div>
+    <div className="text-center py-24 md:py-40 px-4">
+      <h2 className="text-2xl md:text-4xl">เปิดลงทะเบียน <span className="whitespace-no-wrap">ปลายเดือนกุมภาฯ นี้</span></h2>
     </div>
   </Layout>
 );
