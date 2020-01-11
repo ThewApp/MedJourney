@@ -14,11 +14,11 @@ const LegacyLoginPage = ({ location }) => {
 
   const [submitting, setSubmitting] = useState(false);
 
-  const redirectUrl =
-    queryString.parse(location.search).redirect || "/register";
-
   useEffect(() => {
     if (auth) {
+      const redirectUrl =
+        queryString.parse(location.search).redirect || "/register";
+
       const authListener = auth().onAuthStateChanged(function(user) {
         if (user) {
           navigate(redirectUrl, { replace: true });

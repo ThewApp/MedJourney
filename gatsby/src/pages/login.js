@@ -10,11 +10,11 @@ const LoginPage = ({ location }) => {
   const auth = useAuth();
   const [loading, setLoading] = useState(false);
 
-  const redirectUrl =
-    queryString.parse(location.search).redirect || "/register";
-
   useEffect(() => {
     if (auth) {
+      const redirectUrl =
+        queryString.parse(location.search).redirect || "/register";
+
       const authListener = auth().onAuthStateChanged(function(user) {
         if (user) {
           navigate(redirectUrl, { replace: true });
