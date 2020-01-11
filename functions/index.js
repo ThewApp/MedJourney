@@ -71,10 +71,11 @@ exports.legacyLogin = functions
     );
   });
 
-exports.createUser = functions.firestore
-  .document("users/{userId}")
+exports.createUser = functions
+  .region("asia-east2")
+  .firestore.document("users/{userId}")
   .onCreate((snap, context) => {
-    function shortIdAlreadyExists(shortId) {
+    function shortIdExists(shortId) {
       return snap.ref.parent
         .where("shortId", "==", shortId)
         .get()
@@ -84,15 +85,18 @@ exports.createUser = functions.firestore
     }
 
     function generateShortId() {
-      const shortId = Math.floor(Math.random() * 10 ** 6);
-      if (shortIdAlreadyExists(shortId)) {
-        return generateShortId();
-      } else {
-        return shortId;
-      }
+      const shortId = String(Math.floor(Math.random() * 10 ** 6)).padStart(
+        6,
+        "0"
+      );
+      return shortIdExists(shortId).then(exists => {
+        if (exists) {
+          return generateShortId();
+        } else {
+          return shortId;
+        }
+      });
     }
 
-    const shortId = generateShortId();
-
-    return snap.ref.update({ shortId });
+    return generateShortId().then(shortId => snap.ref.update({ shortId }));
   });
