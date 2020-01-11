@@ -36,7 +36,7 @@ const LoginPage = ({ location }) => {
           console.error(error);
         });
     }
-  }, [auth]);
+  }, [auth, location.search]);
 
   useEffect(() => {
     if (sessionStorage.getItem("signInWithRedirect")) {

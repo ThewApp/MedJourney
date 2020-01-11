@@ -29,7 +29,7 @@ const LegacyLoginPage = ({ location }) => {
         navigate(redirectUrl, { replace: true });
       }
     }
-  }, [auth]);
+  }, [auth, location.search]);
 
   const onSubmit = data => {
     setSubmitting(true);
