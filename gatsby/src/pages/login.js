@@ -29,6 +29,8 @@ const LoginPage = ({ location }) => {
         .then(function(result) {
           if (result.user) {
             navigate(redirectUrl, { replace: true });
+          } else {
+            setLoading(false);
           }
         })
         .catch(function(error) {

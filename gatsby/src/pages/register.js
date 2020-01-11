@@ -36,10 +36,13 @@ const RegisterPage = () => {
       setLoading(true);
       firestore()
         .doc("users/" + auth().currentUser.uid)
-        .update({
-          firstName: data.firstName,
-          lastName: data.lastName
-        })
+        .set(
+          {
+            firstName: data.firstName,
+            lastName: data.lastName
+          },
+          { merge: true }
+        )
         .then(() => {
           navigate("/profile", { replace: true });
         });
