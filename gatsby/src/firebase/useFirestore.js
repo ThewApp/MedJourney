@@ -2,14 +2,14 @@ import { useState, useEffect } from "react";
 import { getFirebase } from ".";
 
 /**
- * @return {firebase.auth}
+ * @return {firebase.firestore}
  */
 export default function() {
-  const [auth, setAuth] = useState({ value: null });
+  const [firestore, setFirestore] = useState({ value: null });
   useEffect(() => {
     getFirebase(firebase => {
-      setAuth({ value: firebase.auth });
+      setFirestore({ value: firebase.firestore });
     });
   }, []);
-  return auth.value;
+  return firestore.value;
 }

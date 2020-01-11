@@ -6,16 +6,33 @@ on:
     paths:
       - functions/**
       - firebase.json
+      - .github/**
+  pull_request:
+    branches:
+      - master
+      - dev
+
+env:
+  WORKING_DIRECTORY: ./functions
 
 jobs:
-  deploy:
+  eslint:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
-      - name: Install functions eslint
-        run: |
-          cd functions
-          npm i eslint eslint-plugin-promise
+      - run: npm ci
+        working-directory: ${{ env.WORKING_DIRECTORY }}
+      - run: npm run lint
+        working-directory: ${{ env.WORKING_DIRECTORY }}
+
+  deploy:
+    if: github.event_name	== 'push'
+    runs-on: ubuntu-latest
+    needs: eslint
+    steps:
+      - uses: actions/checkout@v1
+      - run: npm ci
+        working-directory: ${{ env.WORKING_DIRECTORY }}
       - name: Deploy to Prod Firebase Functions
         if: github.ref == 'refs/heads/master'
         uses: w9jds/firebase-action@v1.1.0

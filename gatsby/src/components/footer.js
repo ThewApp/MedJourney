@@ -3,7 +3,7 @@ import React from "react";
 
 const Footer = ({ facebook }) => (
   <footer className="bg-gray-800">
-    <div className="container flex mx-auto text-white px-5 md:px-12 py-12 md:py-24">
+    <div className="container flex mx-auto text-white px-5 md:px-12 py-16 md:py-24">
       <p className="mx-2">ติดตามรายละเอียดเพิ่มเติม ทาง</p>
       <a className="md:mx-4 inline-flex" href={facebook} aria-label="Facebook">
         <svg
