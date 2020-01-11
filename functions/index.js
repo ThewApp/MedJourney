@@ -2,9 +2,6 @@ const functions = require("firebase-functions");
 const admin = require("firebase-admin");
 admin.initializeApp();
 
-// Create and Deploy Your First Cloud Functions
-// https://firebase.google.com/docs/functions/write-firebase-functions
-
 exports.legacyLogin = functions
   .region("asia-east2")
   .https.onCall((data, context) => {
@@ -72,4 +69,30 @@ exports.legacyLogin = functions
         return { token: userToken || newUserToken };
       }
     );
+  });
+
+exports.createUser = functions.firestore
+  .document("users/{userId}")
+  .onCreate((snap, context) => {
+    function shortIdAlreadyExists(shortId) {
+      return snap.ref.parent
+        .where("shortId", "==", shortId)
+        .get()
+        .then(querySnapshot => {
+          return !querySnapshot.empty;
+        });
+    }
+
+    function generateShortId() {
+      const shortId = Math.floor(Math.random() * 10 ** 6);
+      if (shortIdAlreadyExists(shortId)) {
+        return generateShortId();
+      } else {
+        return shortId;
+      }
+    }
+
+    const shortId = generateShortId();
+
+    return snap.ref.update({ shortId });
   });
