@@ -13,27 +13,30 @@ const LoginPage = ({ location }) => {
   const redirectUrl =
     queryString.parse(location.search).redirect || "/register";
 
-  if (auth) {
-    const authListener = auth().onAuthStateChanged(function(user) {
-      if (user) {
-        navigate(redirectUrl, { replace: true });
-      }
-    });
-    if (auth().currentUser) {
-      authListener();
-      navigate(redirectUrl, { replace: true });
-    }
-    auth()
-      .getRedirectResult()
-      .then(function(result) {
-        if (result.user) {
+  useEffect(() => {
+    if (auth) {
+      const authListener = auth().onAuthStateChanged(function(user) {
+        if (user) {
           navigate(redirectUrl, { replace: true });
         }
-      })
-      .catch(function(error) {
-        console.error(error);
       });
-  }
+      if (auth().currentUser) {
+        authListener();
+        navigate(redirectUrl, { replace: true });
+      }
+      auth()
+        .getRedirectResult()
+        .then(function(result) {
+          if (result.user) {
+            navigate(redirectUrl, { replace: true });
+          }
+        })
+        .catch(function(error) {
+          setLoading(false);
+          console.error(error);
+        });
+    }
+  }, [auth]);
 
   useEffect(() => {
     if (sessionStorage.getItem("signInWithRedirect")) {

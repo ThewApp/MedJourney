@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, navigate } from "gatsby";
 
 import Layout from "../components/layout";
@@ -17,17 +17,19 @@ const LegacyLoginPage = ({ location }) => {
   const redirectUrl =
     queryString.parse(location.search).redirect || "/register";
 
-  if (auth) {
-    const authListener = auth().onAuthStateChanged(function(user) {
-      if (user) {
+  useEffect(() => {
+    if (auth) {
+      const authListener = auth().onAuthStateChanged(function(user) {
+        if (user) {
+          navigate(redirectUrl, { replace: true });
+        }
+      });
+      if (auth().currentUser) {
+        authListener();
         navigate(redirectUrl, { replace: true });
       }
-    });
-    if (auth().currentUser) {
-      authListener();
-      navigate(redirectUrl, { replace: true });
     }
-  }
+  }, [auth]);
 
   const onSubmit = data => {
     setSubmitting(true);
