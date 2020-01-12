@@ -1,0 +1,20 @@
+[
+  {
+    "eventId": "001",
+    "eventName": "event1",
+    "eventPath": "event1",
+    "eventDescription": "event1 description"
+  },
+  {
+    "eventId": "002",
+    "eventName": "event2",
+    "eventPath": "event2",
+    "eventDescription": "event2 description"
+  },
+  {
+    "eventId": "003",
+    "eventName": "event3",
+    "eventPath": "event3",
+    "eventDescription": "event3 description"
+  }
+]
