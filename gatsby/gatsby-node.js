@@ -18,13 +18,15 @@ exports.createPages = async ({ graphql, actions }) => {
       }
     }
   `);
-  result.data.allEventsJson.nodes.forEach(({ eventPath, eventName, eventId }) => {
-    actions.createPage({
-      path: `/events/${eventPath}`,
-      component: path.resolve(`./src/templates/event.js`),
-      context: {
-        slug: eventId
-      }
-    });
-  });
+  result.data.allEventsJson.nodes.forEach(
+    ({ eventPath, eventName, eventId }) => {
+      actions.createPage({
+        path: `/events/${eventPath}`,
+        component: path.resolve(`./src/templates/event.js`),
+        context: {
+          slug: eventId
+        }
+      });
+    }
+  );
 };
