@@ -15,15 +15,6 @@ const LoginPage = ({ location }) => {
       const redirectUrl =
         queryString.parse(location.search).redirect || "/register";
 
-      const authListener = auth().onAuthStateChanged(function(user) {
-        if (user) {
-          navigate(redirectUrl, { replace: true });
-        }
-      });
-      if (auth().currentUser) {
-        authListener();
-        navigate(redirectUrl, { replace: true });
-      }
       auth()
         .getRedirectResult()
         .then(function(result) {
@@ -37,6 +28,12 @@ const LoginPage = ({ location }) => {
           setLoading(false);
           console.error(error);
         });
+
+      return auth().onAuthStateChanged(function(user) {
+        if (user) {
+          navigate(redirectUrl, { replace: true });
+        }
+      });
     }
   }, [auth, location.search]);
 

@@ -9,26 +9,36 @@ import { useForm } from "react-hook-form";
 const RegisterPage = () => {
   const auth = useAuth();
   const firestore = useFirestore();
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [currentUser, setCurrentUser] = useState();
 
   useEffect(() => {
-    if (auth && !auth().currentUser) {
-      navigate("/login", { replace: true });
+    if (auth) {
+      return auth().onAuthStateChanged(user => {
+        if (user) {
+          setCurrentUser(user);
+        } else {
+          navigate(`/login`, { replace: true });
+          setCurrentUser();
+        }
+      });
     }
   }, [auth]);
 
   useEffect(() => {
-    if (auth && auth().currentUser && firestore) {
+    if (firestore && currentUser) {
       firestore()
-        .doc("users/" + auth().currentUser.uid)
+        .doc("users/" + currentUser.uid)
         .get()
         .then(doc => {
           if (doc.get("firstName")) {
             navigate("/profile", { replace: true });
+          } else {
+            setLoading(false);
           }
         });
     }
-  }, [auth, firestore]);
+  }, [firestore, currentUser]);
 
   const { register, handleSubmit, errors } = useForm();
   const onSubmit = data => {

@@ -30,8 +30,9 @@ export default function() {
           .then(docSnapshot => {
             if (!docSnapshot.get("firstName")) {
               navigate("/register", { replace: true });
+            } else {
+              setFirestoreUser(docSnapshot.data());
             }
-            setFirestoreUser(docSnapshot.data());
           });
       } else {
         setFirestoreUser();
