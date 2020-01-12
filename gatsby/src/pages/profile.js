@@ -7,7 +7,7 @@ import SEO from "../components/seo";
 import useUser from "../firebase/useUser";
 
 const ProfilePage = () => {
-  const [authUser, firestoreUser] = useUser();
+  const [, firestoreUser] = useUser();
   const [qrcodeUrl, setqrcodeUrl] = useState();
 
   useEffect(() => {

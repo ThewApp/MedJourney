@@ -22,20 +22,22 @@ export default function() {
   }, [auth]);
 
   useEffect(() => {
-    if (authUser) {
-      firestore()
-        .doc(`users/${authUser.uid}`)
-        .get()
-        .then(docSnapshot => {
-          if (!docSnapshot.get("firstName")) {
-            navigate("/register", { replace: true });
-          }
-          setFirestoreUser(docSnapshot.data());
-        });
-    } else {
-      setFirestoreUser();
+    if (firestore) {
+      if (authUser) {
+        firestore()
+          .doc(`users/${authUser.uid}`)
+          .get()
+          .then(docSnapshot => {
+            if (!docSnapshot.get("firstName")) {
+              navigate("/register", { replace: true });
+            }
+            setFirestoreUser(docSnapshot.data());
+          });
+      } else {
+        setFirestoreUser();
+      }
     }
-  }, [authUser]);
+  }, [authUser, firestore]);
 
   return [authUser, firestoreUser];
 }
