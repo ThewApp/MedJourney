@@ -12,13 +12,15 @@ const RegisterPage = ({ path }) => {
   });
   const [loading, setLoading] = useState(true);
 
-  if (firestoreUser) {
-    if (firestoreUser.firstName) {
-      navigate("/app", { replace: true });
-    } else {
-      setLoading(false);
+  useEffect(() => {
+    if (firestoreUser) {
+      if (firestoreUser.firstName) {
+        navigate("/app", { replace: true });
+      } else {
+        setLoading(false);
+      }
     }
-  }
+  }, [firestoreUser]);
 
   const { register, handleSubmit, errors } = useForm();
   const onSubmit = data => {
