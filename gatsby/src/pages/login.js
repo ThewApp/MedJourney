@@ -11,7 +11,10 @@ const LoginPage = () => {
   const auth = useAuth();
   const [loading, setLoading] = useState(false);
 
-  const redirectUrl = sessionStorage.getItem("loginRedirect") || "/register";
+  const redirectUrl =
+    typeof window !== "undefined"
+      ? sessionStorage.getItem("loginRedirect") || "/register"
+      : "/register";
 
   useEffect(() => {
     if (authUser && authUser.uid) {

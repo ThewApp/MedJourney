@@ -15,7 +15,10 @@ const LegacyLoginPage = ({ location }) => {
 
   const [submitting, setSubmitting] = useState(false);
 
-  const redirectUrl = sessionStorage.getItem("loginRedirect") || "/register";
+  const redirectUrl =
+    typeof window !== "undefined"
+      ? sessionStorage.getItem("loginRedirect") || "/register"
+      : "/register";
 
   useEffect(() => {
     if (authUser && authUser.uid) {
