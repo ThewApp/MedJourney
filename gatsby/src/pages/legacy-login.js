@@ -1,31 +1,28 @@
 import React, { useState, useEffect } from "react";
 import { Link, navigate } from "gatsby";
+import { useForm } from "react-hook-form";
 
 import Layout from "../components/layout";
 import SEO from "../components/seo";
+import useUser from "../context/user";
 import { useAuth, useFunctions } from "../firebase";
-import { useForm } from "react-hook-form";
-import queryString from "query-string";
 
 const LegacyLoginPage = ({ location }) => {
+  const { authUser } = useUser();
   const auth = useAuth();
   const functions = useFunctions();
   const { register, handleSubmit, errors, setError } = useForm();
 
   const [submitting, setSubmitting] = useState(false);
 
-  useEffect(() => {
-    if (auth) {
-      const redirectUrl =
-        queryString.parse(location.search).redirect || "/register";
+  const redirectUrl = sessionStorage.getItem("loginRedirect") || "/register";
 
-      return auth().onAuthStateChanged(function(user) {
-        if (user) {
-          navigate(redirectUrl, { replace: true });
-        }
-      });
+  useEffect(() => {
+    if (authUser && authUser.uid) {
+      sessionStorage.removeItem("loginRedirect");
+      navigate(redirectUrl, { replace: true });
     }
-  }, [auth, location.search]);
+  }, [authUser, redirectUrl]);
 
   const onSubmit = data => {
     setSubmitting(true);
@@ -43,6 +40,11 @@ const LegacyLoginPage = ({ location }) => {
     );
   };
 
+  useEffect(() => {
+    /* global ___loader */
+    ___loader.enqueue(redirectUrl);
+  }, [redirectUrl]);
+
   return (
     <Layout>
       <SEO title="ลงทะเบียนด้วยบัตรประชาชน" />
@@ -51,14 +53,16 @@ const LegacyLoginPage = ({ location }) => {
           <p className="text-center">กำลังลงทะเบียน</p>
         ) : (
           <>
-            <h1 className="font-bold text-lg mb-4">ลงทะเบียนด้วยบัตรประชาชน</h1>
+            <h1 className="font-bold text-lg mb-4">
+              ลงทะเบียนด้วยเลขประจำตัวประชาชน
+            </h1>
             <form onSubmit={handleSubmit(onSubmit)}>
               <div className="mb-4">
                 <label
                   className="block text-gray-700 text mb-2"
                   htmlFor="thaiId"
                 >
-                  บัตรประชาชน 13 หลัก
+                  เลขประจำตัวประชาชน 13 หลัก
                 </label>
                 <input
                   className="shadow appearance-none bg-white border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"

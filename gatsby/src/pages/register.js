@@ -3,65 +3,38 @@ import { navigate } from "gatsby";
 
 import Layout from "../components/layout";
 import SEO from "../components/seo";
-import { useAuth, useFirestore } from "../firebase";
 import { useForm } from "react-hook-form";
+import useUser from "../context/user";
 
-const RegisterPage = () => {
-  const auth = useAuth();
-  const firestore = useFirestore();
+const RegisterPage = ({ path }) => {
+  const { firestoreUser, updateFirestoreUser } = useUser({
+    path
+  });
   const [loading, setLoading] = useState(true);
-  const [currentUser, setCurrentUser] = useState();
 
-  useEffect(() => {
-    if (auth) {
-      return auth().onAuthStateChanged(user => {
-        if (user) {
-          setCurrentUser(user);
-        } else {
-          navigate(`/login`, { replace: true });
-          setCurrentUser();
-        }
-      });
-    }
-  }, [auth]);
-
-  useEffect(() => {
-    if (firestore && currentUser) {
-      firestore()
-        .doc("users/" + currentUser.uid)
-        .get()
-        .then(doc => {
-          if (doc.get("firstName")) {
-            navigate("/profile", { replace: true });
-          } else {
-            setLoading(false);
-          }
-        });
-    }
-  }, [firestore, currentUser]);
+  if (firestoreUser && firestoreUser.firstName) {
+    navigate("/app", { replace: true });
+  }
 
   const { register, handleSubmit, errors } = useForm();
   const onSubmit = data => {
-    if (auth && auth().currentUser && firestore) {
+    if (firestoreUser) {
       setLoading(true);
-      firestore()
-        .doc("users/" + auth().currentUser.uid)
-        .set(
-          {
-            firstName: data.firstName,
-            lastName: data.lastName
-          },
-          { merge: true }
-        )
-        .then(() => {
-          navigate("/profile", { replace: true });
-        });
+      updateFirestoreUser({
+        firstName: data.firstName,
+        lastName: data.lastName
+      });
     }
   };
 
+  useEffect(() => {
+    /* global ___loader */
+    ___loader.enqueue("/app");
+  }, []);
+
   return (
     <Layout>
-      <SEO title="ลงทะเบียน" />
+      <SEO title="กรอกข้อมูลส่วนตัว" />
       <div className="w-full max-w-md mx-auto md:shadow-md rounded p-3 sm:p-6 md:p-8 mt-16 mb-32">
         {loading ? (
           <p className="text-center">กำลังลงทะเบียน</p>
@@ -117,7 +90,7 @@ const RegisterPage = () => {
                   className="my-2 bg-primary-600 hover:bg-primary-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
                   type="submit"
                 >
-                  ลงทะเบียน
+                  บันทึก
                 </button>
               </div>
             </form>

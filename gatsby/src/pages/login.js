@@ -4,17 +4,24 @@ import { Link, navigate } from "gatsby";
 import Layout from "../components/layout";
 import SEO from "../components/seo";
 import { useAuth } from "../firebase";
-import queryString from "query-string";
+import useUser from "../context/user";
 
-const LoginPage = ({ location }) => {
+const LoginPage = () => {
+  const { authUser } = useUser();
   const auth = useAuth();
   const [loading, setLoading] = useState(false);
 
+  const redirectUrl = sessionStorage.getItem("loginRedirect") || "/register";
+
+  useEffect(() => {
+    if (authUser && authUser.uid) {
+      sessionStorage.removeItem("loginRedirect")
+      navigate(redirectUrl, { replace: true });
+    }
+  }, [authUser, redirectUrl]);
+
   useEffect(() => {
     if (auth) {
-      const redirectUrl =
-        queryString.parse(location.search).redirect || "/register";
-
       auth()
         .getRedirectResult()
         .then(function(result) {
@@ -28,14 +35,8 @@ const LoginPage = ({ location }) => {
           setLoading(false);
           console.error(error);
         });
-
-      return auth().onAuthStateChanged(function(user) {
-        if (user) {
-          navigate(redirectUrl, { replace: true });
-        }
-      });
     }
-  }, [auth, location.search]);
+  }, [auth, redirectUrl]);
 
   useEffect(() => {
     if (sessionStorage.getItem("signInWithRedirect")) {
@@ -51,6 +52,11 @@ const LoginPage = ({ location }) => {
       sessionStorage.setItem("signInWithRedirect", "true");
     }
   }
+
+  useEffect(() => {
+    /* global ___loader */
+    ___loader.enqueue(redirectUrl);
+  }, [redirectUrl]);
 
   return (
     <Layout>

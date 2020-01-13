@@ -4,10 +4,10 @@ import QRCode from "qrcode";
 
 import Layout from "../components/layout";
 import SEO from "../components/seo";
-import useUser from "../firebase/useUser";
+import useUser from "../context/user";
 
-const ProfilePage = () => {
-  const [, firestoreUser] = useUser();
+const AppPage = ({ path }) => {
+  const { firestoreUser } = useUser({ path });
   const [qrcodeUrl, setqrcodeUrl] = useState();
 
   useEffect(() => {
@@ -24,8 +24,8 @@ const ProfilePage = () => {
 
   return (
     <Layout>
-      <SEO title="Profile" />
-      {firestoreUser ? (
+      <SEO title="App" />
+      {firestoreUser && firestoreUser.shortId ? (
         <div className="container mx-auto">
           <img
             alt="QR Code"
@@ -44,4 +44,4 @@ const ProfilePage = () => {
   );
 };
 
-export default ProfilePage;
+export default AppPage;

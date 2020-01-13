@@ -14,11 +14,6 @@ export const onRenderBody = ({ setHeadComponents, setPostBodyComponents }) => {
       href="/__/firebase/init.json"
       as="fetch"
       crossOrigin="anonymous"
-    ></link>,
-    <link
-      key="firebaseinstallations"
-      rel="preconnect"
-      href="https://firebaseinstallations.googleapis.com"
     ></link>
   ]);
 };
