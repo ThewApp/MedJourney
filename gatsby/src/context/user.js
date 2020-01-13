@@ -94,8 +94,8 @@ function useUser({ path } = {}) {
   }
   if (path) {
     if (context.authUser && !context.authUser.uid) {
-      sessionStorage.setItem("loginRedirect", path)
-      navigate("/login", {replace: true})
+      sessionStorage.setItem("loginRedirect", path);
+      navigate("/login", { replace: true });
     }
   }
   return context;

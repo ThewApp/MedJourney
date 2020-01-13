@@ -3,9 +3,9 @@
  *
  * See: https://www.gatsbyjs.org/docs/browser-apis/
  */
-import React from "react"
+import React from "react";
 
-import { UserProvider } from "./src/context/user.js"
+import { UserProvider } from "./src/context/user.js";
 import { logPageView, initAnalytics } from "./src/firebase/analytics";
 
 export const onInitialClientRender = () => {
@@ -21,4 +21,4 @@ export const onRouteUpdate = ({ prevLocation }) => {
 
 export const wrapRootElement = ({ element }) => (
   <UserProvider>{element}</UserProvider>
-)
+);

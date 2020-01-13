@@ -15,7 +15,7 @@ const LoginPage = () => {
 
   useEffect(() => {
     if (authUser && authUser.uid) {
-      sessionStorage.removeItem("loginRedirect")
+      sessionStorage.removeItem("loginRedirect");
       navigate(redirectUrl, { replace: true });
     }
   }, [authUser, redirectUrl]);
