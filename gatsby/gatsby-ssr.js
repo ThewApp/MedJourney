@@ -6,6 +6,8 @@
 
 import React from "react";
 
+import { UserProvider } from "./src/context/user.js";
+
 export const onRenderBody = ({ setHeadComponents, setPostBodyComponents }) => {
   setHeadComponents([
     <link
@@ -17,3 +19,7 @@ export const onRenderBody = ({ setHeadComponents, setPostBodyComponents }) => {
     ></link>
   ]);
 };
+
+export const wrapRootElement = ({ element }) => (
+  <UserProvider>{element}</UserProvider>
+);
