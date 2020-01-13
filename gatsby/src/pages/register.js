@@ -12,8 +12,12 @@ const RegisterPage = ({ path }) => {
   });
   const [loading, setLoading] = useState(true);
 
-  if (firestoreUser && firestoreUser.firstName) {
-    navigate("/app", { replace: true });
+  if (firestoreUser) {
+    if (firestoreUser.firstName) {
+      navigate("/app", { replace: true });
+    } else {
+      setLoading(false);
+    }
   }
 
   const { register, handleSubmit, errors } = useForm();
