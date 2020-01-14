@@ -6,8 +6,8 @@ import Layout from "../components/layout";
 import SEO from "../components/seo";
 import useUser from "../context/user";
 
-const AppPage = ({ path }) => {
-  const { firestoreUser } = useUser({ path });
+const AppPage = () => {
+  const { firestoreUser } = useUser();
   const [qrcodeUrl, setqrcodeUrl] = useState();
 
   useEffect(() => {

@@ -6,7 +6,8 @@
 
 import React from "react";
 
-import { UserProvider } from "./src/context/user.js";
+import { LocationProvider } from "./src/context/location";
+import { UserProvider } from "./src/context/user";
 
 export const onRenderBody = ({ setHeadComponents, setPostBodyComponents }) => {
   setHeadComponents([
@@ -19,6 +20,10 @@ export const onRenderBody = ({ setHeadComponents, setPostBodyComponents }) => {
     ></link>
   ]);
 };
+
+export const wrapPageElement = ({ element }) => (
+  <LocationProvider>{element}</LocationProvider>
+);
 
 export const wrapRootElement = ({ element }) => (
   <UserProvider>{element}</UserProvider>

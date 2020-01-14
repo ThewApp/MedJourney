@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
+import Helmet from "react-helmet";
 import { navigate } from "gatsby";
 
+import useLocation from "./location";
 import { useAuth, useFirestore } from "../firebase";
-import Helmet from "react-helmet";
 
 const UserContext = React.createContext();
 
@@ -36,7 +37,7 @@ export function UserProvider(props) {
             }
           });
       } else {
-        setFirestoreUser({});
+        setFirestoreUser();
       }
     }
   }, [authUser, firestore]);
@@ -87,15 +88,22 @@ export function UserProvider(props) {
 /**
  * @return {user}
  */
-function useUser({ path } = {}) {
+function useUser() {
   const context = React.useContext(UserContext);
+  const location = useLocation();
   if (context === undefined) {
     throw new Error(`useUser must be used within a UserProvider`);
   }
-  if (path) {
-    if (context.authUser && !context.authUser.uid) {
-      sessionStorage.setItem("loginRedirect", path);
+  if (/(app|register)/.test(location.pathname) && context.authUser) {
+    if (!context.authUser.uid) {
+      sessionStorage.setItem("loginRedirect", location.pathname);
       navigate("/login", { replace: true });
+    } else if (
+      !/^\/register\/?$/.test(location.pathname) &&
+      context.firestoreUser &&
+      !context.firestoreUser.firstName
+    ) {
+      navigate("/register", { replace: true });
     }
   }
   return context;

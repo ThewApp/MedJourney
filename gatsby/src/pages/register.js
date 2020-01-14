@@ -6,10 +6,8 @@ import SEO from "../components/seo";
 import { useForm } from "react-hook-form";
 import useUser from "../context/user";
 
-const RegisterPage = ({ path }) => {
-  const { firestoreUser, updateFirestoreUser } = useUser({
-    path
-  });
+const RegisterPage = () => {
+  const { firestoreUser, updateFirestoreUser } = useUser();
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
