@@ -85,7 +85,7 @@ exports.createUser = functions
     }
 
     function generateShortId() {
-      const shortId = String(Math.floor(Math.random() * 10 ** 6)).padStart(
+      const shortId = String(Math.floor(Math.random() * 10 ** 8)).padStart(
         6,
         "0"
       );
