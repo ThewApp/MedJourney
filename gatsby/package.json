@@ -22,7 +22,7 @@
     "react-hook-form": "^4.4.8"
   },
   "devDependencies": {
-    "autoprefixer": "^9.7.3",
+    "autoprefixer": "^9.7.4",
     "prettier": "^1.19.1",
     "tailwindcss": "^1.1.4"
   },
