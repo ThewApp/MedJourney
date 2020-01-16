@@ -5,10 +5,10 @@ class Firebase {
 
   init() {
     if (typeof window !== "undefined") {
+      const firebaseConfig = JSON.parse(process.env.GATSBY_API_FIREBASE);
       const app = import(/* webpackPreload: true */ "firebase/app");
-      const init = fetch("/__/firebase/init.json").then(res => res.json());
-      Promise.all([app, init]).then(async ([app, init]) => {
-        app.initializeApp(init);
+      app.then(async app => {
+        app.initializeApp(firebaseConfig);
         await import(/* webpackPreload: true */ "firebase/auth");
         await import(/* webpackPreload: true */ "firebase/firestore");
         await import(/* webpackPreload: true */ "firebase/remote-config");
