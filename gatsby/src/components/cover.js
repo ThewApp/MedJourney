@@ -29,6 +29,7 @@ const Cover = () => {
   return (
     <Img
       className="w-100"
+      loading="auto"
       fluid={{ ...data.coverImage.childImageSharp.fluid, sizes: "100vw" }}
     />
   );
