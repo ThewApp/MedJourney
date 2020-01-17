@@ -1,74 +1,88 @@
-import React, { useState, useEffect, useRef } from "react";
-import jsQR from "jsqr";
+import React, { useState, useEffect } from "react";
 
 import Layout from "../components/layout";
 import SEO from "../components/seo";
+import QRCodeReader from "../components/QRCodeReader";
+import { useFirestore } from "../firebase";
 
-const AppPage = () => {
-  const video = useRef();
-  const canvas = useRef();
-  const [videoCanPlayThrough, setVideoCanPlayThrough] = useState(false);
-  const [code, setCode] = useState();
+const StaffPage = ({ location }) => {
+  const firestore = useFirestore();
+  const [staff, setStaff] = useState();
+  const [userShortId, setUserShortId] = useState();
+  const [status, setStatus] = useState("Ready");
+  const [stampedUserShortId, setStampedUserShortId] = useState();
+
   useEffect(() => {
-    navigator.mediaDevices
-      .getUserMedia({ video: { facingMode: "environment" } })
-      .then(stream => {
-        video.current.srcObject = stream;
-        video.current.setAttribute("playsinline", true);
-        video.current.play();
-        video.current.addEventListener("canplaythrough", () => {
-          setVideoCanPlayThrough(true);
+    const urlParams = new URLSearchParams(location.search);
+    const staffId = urlParams.get("staffId");
+    if (firestore && staffId) {
+      firestore()
+        .doc(`staffs/${staffId}`)
+        .get()
+        .then(docSnapshot => {
+          setStaff({ ...docSnapshot.data(), staffId });
         });
-      });
-  }, []);
+    }
+  }, [firestore, location]);
 
   useEffect(() => {
-    if (videoCanPlayThrough) {
-      canvas.current.width = video.current.videoWidth;
-      canvas.current.height = video.current.videoHeight;
-
-      let timeout;
-      let animationFrame;
-      function tick() {
-        canvas.current
-          .getContext("2d")
-          .drawImage(
-            video.current,
-            0,
-            0,
-            canvas.current.width,
-            canvas.current.height
-          );
-        const imageData = canvas.current
-          .getContext("2d")
-          .getImageData(0, 0, canvas.current.width, canvas.current.height);
-        const qr = jsQR(imageData.data, imageData.width, imageData.height);
-        const result = qr ? qr.data : null;
-        if (result) {
-          timeout = setTimeout(tick, 1000);
-        } else {
-          animationFrame = requestAnimationFrame(tick);
-        }
-        setCode(result);
-      }
-
-      animationFrame = requestAnimationFrame(tick);
-
-      return () => {
-        clearTimeout(timeout);
-        cancelAnimationFrame(animationFrame);
-      };
+    if (
+      firestore &&
+      staff &&
+      userShortId &&
+      status === "Ready" &&
+      stampedUserShortId !== userShortId
+    ) {
+      setStatus("Stamping");
+      firestore()
+        .collection("stamps")
+        .add({
+          eventType: staff.eventType,
+          staffId: staff.staffId,
+          userShortId,
+          timestamp: firestore.FieldValue.serverTimestamp()
+        })
+        .then(
+          () => {
+            setStatus("Success");
+            setStampedUserShortId(userShortId);
+          },
+          error => {
+            console.error(error);
+            setStatus("An error has occured.");
+          }
+        );
+    } else if (stampedUserShortId === userShortId) {
+      setStatus("Stamped");
+    } else if (status === "Stamped") {
+      setStatus("Ready");
     }
-  }, [videoCanPlayThrough]);
+  }, [firestore, staff, userShortId, status, stampedUserShortId]);
+
+  useEffect(() => {
+    if (status === "Success") {
+      const timeout = setTimeout(() => setStatus("Ready"), 2000);
+      return () => clearTimeout(timeout);
+    }
+  }, [status]);
+
   return (
     <Layout>
       <SEO title="App" />
-      {/* eslint-disable-next-line jsx-a11y/media-has-caption */}
-      <video className="container mx-auto" ref={video} track="Camera" />
-      <canvas className="hidden" ref={canvas} />
-      <p>Code: {code}</p>
+      {staff && <h1 className="text-center text-lg">{staff.eventType}</h1>}
+      {staff ? (
+        <div className="container mx-auto md:flex">
+          <QRCodeReader className="md:w-1/2 md:mx-2" setCode={setUserShortId} />
+          <div className="md:mx-2 md:flex-grow md:order-first">
+            <p>Code: {userShortId}</p>
+            <p>Status: {status}</p>
+          </div>
+        </div>
+      ) : (
+        "Loading"
+      )}
     </Layout>
   );
 };
 
-export default AppPage;
+export default StaffPage;
