@@ -52,7 +52,7 @@ const StaffPage = ({ location }) => {
             setStatus("An error has occured.");
           }
         );
-    } else if (stampedUserShortId === userShortId) {
+    } else if (stampedUserShortId && stampedUserShortId === userShortId) {
       setStatus("Stamped");
     } else if (status === "Stamped") {
       setStatus("Ready");
