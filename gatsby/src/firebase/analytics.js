@@ -7,11 +7,13 @@ class Amplitude {
 
   init() {
     if (typeof window !== "undefined") {
-      import("amplitude-js").then(amplitude => {
-        amplitude.getInstance().init(process.env.GATSBY_API_AMPLITUDE);
-        this.amplitude = amplitude;
-        this.q.forEach(callback => callback(this.amplitude));
-      });
+      import(/* webpackChunkName: "amplitude-js" */ "amplitude-js").then(
+        amplitude => {
+          amplitude.getInstance().init(process.env.GATSBY_API_AMPLITUDE);
+          this.amplitude = amplitude;
+          this.q.forEach(callback => callback(this.amplitude));
+        }
+      );
     }
   }
 
@@ -43,10 +45,14 @@ export const getAmplitude = amplitude.getAmplitude.bind(amplitude);
 
 export function initAnalytics() {
   getFirebase(firebase => {
-    import("firebase/analytics").then(() => {
+    import(
+      /* webpackChunkName: "firebase-analytics" */ "firebase/analytics"
+    ).then(() => {
       firebase.analytics();
     });
-    import("firebase/performance").then(() => {
+    import(
+      /* webpackChunkName: "firebase-analytics" */ "firebase/performance"
+    ).then(() => {
       firebase.performance();
     });
   });
