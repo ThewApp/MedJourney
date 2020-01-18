@@ -5,9 +5,10 @@ const QRCodeReader = ({ setCode, ...props }) => {
   const video = useRef();
   const canvas = useRef();
   const [videoCanPlayThrough, setVideoCanPlayThrough] = useState(false);
+  const [facingMode, setFacingMode] = useState("environment");
   useEffect(() => {
     navigator.mediaDevices
-      .getUserMedia({ video: { facingMode: "environment" } })
+      .getUserMedia({ video: { facingMode } })
       .then(stream => {
         video.current.srcObject = stream;
         video.current.setAttribute("playsinline", true);
@@ -16,7 +17,7 @@ const QRCodeReader = ({ setCode, ...props }) => {
           setVideoCanPlayThrough(true);
         });
       });
-  }, []);
+  }, [facingMode]);
 
   useEffect(() => {
     if (videoCanPlayThrough) {
@@ -56,10 +57,17 @@ const QRCodeReader = ({ setCode, ...props }) => {
       };
     }
   }, [videoCanPlayThrough, setCode]);
+
+  function toggleFacingMode() {
+    facingMode === "environment"
+      ? setFacingMode("user")
+      : setFacingMode("environment");
+  }
+
   return (
     <div className="mx-auto" {...props}>
       {/* eslint-disable-next-line jsx-a11y/media-has-caption */}
-      <video className="w-full" ref={video} track="Camera" />
+      <video className="w-full" ref={video} onClick={toggleFacingMode} />
       <canvas className="hidden" ref={canvas} />
     </div>
   );
