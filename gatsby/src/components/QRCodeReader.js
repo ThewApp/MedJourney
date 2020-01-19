@@ -76,7 +76,7 @@ const QRCodeReader = ({ setCode, ...props }) => {
   }
 
   return (
-    <div className="mx-auto p-4" {...props}>
+    <div className="mx-auto" {...props}>
       {/* eslint-disable-next-line jsx-a11y/media-has-caption */}
       <video
         className="w-full cursor-pointer"

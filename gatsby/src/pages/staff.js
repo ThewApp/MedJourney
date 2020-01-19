@@ -62,15 +62,13 @@ function Stamp({ userShortId, staff, onSuccess }) {
   };
 
   return (
-    <div className="flex justify-between sm:flex-col">
-      <div className="p-4 text-lg sm:text-2xl">
-        <p>User ID: {userShortId}</p>
-        <p>Status: {status}</p>
-        <div
-          className="block my-2 w-full h-5"
-          style={{ backgroundColor: statusColor[status] || "gray" }}
-        />
-      </div>
+    <div className="text-lg sm:text-2xl">
+      <p>User ID: {userShortId}</p>
+      <p>Status: {status}</p>
+      <div
+        className="block my-2 w-full h-5"
+        style={{ backgroundColor: statusColor[status] || "gray" }}
+      />
     </div>
   );
 }
@@ -101,10 +99,10 @@ const StaffPage = ({ location }) => {
       {staff && <h1 className="text-center text-lg">{staff.eventType}</h1>}
       {staff ? (
         <div className="container mx-auto sm:flex">
-          <div className="sm:w-1/2 sm:mx-2">
+          <div className="sm:w-1/2 p-4">
             {mode.includes("QR") && <QRCodeReader setCode={setUserShortId} />}
             {mode.includes("Manual") && (
-              <div className="p-4">
+              <div>
                 <label className="block mb-2" htmlFor="userShortId">
                   รหัส 8 หลัก
                 </label>
@@ -125,12 +123,12 @@ const StaffPage = ({ location }) => {
               </div>
             )}
           </div>
-          <div className="sm:mx-2 sm:flex-auto sm:order-first">
+          <div className="sm:flex-auto sm:order-first p-4">
             {/* eslint-disable-next-line jsx-a11y/no-onchange */}
             <select
               value={mode}
               onChange={event => setMode(event.target.value)}
-              className="w-full border p-2"
+              className="w-full border p-2 my-2"
             >
               <option>QR Stamp</option>
               <option>Manual Stamp</option>
