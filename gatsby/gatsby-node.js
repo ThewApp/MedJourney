@@ -9,24 +9,20 @@ const path = require(`path`);
 exports.createPages = async ({ graphql, actions }) => {
   const result = await graphql(`
     query {
-      allEventsJson {
+      allEventsYaml {
         nodes {
           eventPath
-          eventName
-          eventId
         }
       }
     }
   `);
-  result.data.allEventsJson.nodes.forEach(
-    ({ eventPath, eventName, eventId }) => {
-      actions.createPage({
-        path: `/events/${eventPath}`,
-        component: path.resolve(`./src/templates/event.js`),
-        context: {
-          slug: eventId
-        }
-      });
-    }
-  );
+  result.data.allEventsYaml.nodes.forEach(({ eventPath }) => {
+    actions.createPage({
+      path: `/events/${eventPath}`,
+      component: path.resolve(`./src/templates/event.js`),
+      context: {
+        eventPath
+      }
+    });
+  });
 };

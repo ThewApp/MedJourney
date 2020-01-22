@@ -27,6 +27,7 @@ module.exports = {
       }
     },
     `gatsby-transformer-json`,
+    `gatsby-transformer-yaml`,
     {
       resolve: `gatsby-plugin-manifest`,
       options: {
