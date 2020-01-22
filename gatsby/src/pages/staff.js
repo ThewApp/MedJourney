@@ -8,43 +8,49 @@ import { useFirestore } from "../firebase";
 function Stamp({ userShortId, staff, onSuccess }) {
   const firestore = useFirestore();
   const [status, setStatus] = useState("Ready");
-  const [stampedUserShortId, setStampedUserShortId] = useState();
+  const [stampedUserShortIds, setStampedUserShortIds] = useState([]);
 
   useEffect(() => {
-    if (
-      firestore &&
-      staff &&
-      userShortId &&
-      userShortId.length === 8 &&
-      status === "Ready" &&
-      stampedUserShortId !== userShortId
-    ) {
-      setStatus("Stamping");
-      firestore()
-        .collection("stamps")
-        .add({
-          eventType: staff.eventType,
-          staffId: staff.staffId,
-          userShortId,
-          timestamp: firestore.FieldValue.serverTimestamp()
-        })
-        .then(
-          () => {
-            setStatus("Success");
-            setStampedUserShortId(userShortId);
-            onSuccess();
-          },
-          error => {
-            console.error(error);
-            setStatus("An error has occured.");
-          }
-        );
-    } else if (status === "Ready" && stampedUserShortId === userShortId) {
-      setStatus("Stamped");
-    } else if (status === "Stamped" && stampedUserShortId !== userShortId) {
-      setStatus("Ready");
+    if (firestore && staff) {
+      const stamped = stampedUserShortIds.includes(userShortId);
+      if (
+        userShortId &&
+        userShortId.length === 8 &&
+        status === "Ready" &&
+        !stamped
+      ) {
+        setStatus("Stamping");
+        performance.mark("Start stamp");
+        firestore()
+          .collection("stamps")
+          .add({
+            eventType: staff.eventType,
+            staffId: staff.staffId,
+            userShortId,
+            timestamp: firestore.FieldValue.serverTimestamp()
+          })
+          .then(
+            () => {
+              performance.measure("Stamp", "Start stamp");
+              setStatus("Success");
+              setStampedUserShortIds(stampedUserShortIds => [
+                userShortId,
+                ...stampedUserShortIds.slice(0, 4)
+              ]);
+              onSuccess();
+            },
+            error => {
+              console.error(error);
+              setStatus("An error has occured.");
+            }
+          );
+      } else if (status === "Ready" && stamped) {
+        setStatus("Stamped");
+      } else if (status === "Stamped" && !stamped) {
+        setStatus("Ready");
+      }
     }
-  }, [firestore, staff, userShortId, status, stampedUserShortId, onSuccess]);
+  }, [firestore, staff, userShortId, status, stampedUserShortIds, onSuccess]);
 
   useEffect(() => {
     if (status === "Success") {
@@ -62,13 +68,23 @@ function Stamp({ userShortId, staff, onSuccess }) {
   };
 
   return (
-    <div className="text-lg sm:text-2xl">
-      <p>User ID: {userShortId}</p>
-      <p>Status: {status}</p>
+    <div>
+      <p className="text-lg sm:text-2xl">User ID: {userShortId}</p>
+      <p className="text-lg sm:text-2xl">Status: {status}</p>
       <div
         className="block my-2 w-full h-5"
         style={{ backgroundColor: statusColor[status] || "gray" }}
       />
+      {stampedUserShortIds.length > 0 && (
+        <>
+          <p>Stamped:</p>
+          <ul className="ml-2">
+            {stampedUserShortIds.map(stampedUserShortId => (
+              <li key={stampedUserShortId}>{stampedUserShortId}</li>
+            ))}
+          </ul>
+        </>
+      )}
     </div>
   );
 }
