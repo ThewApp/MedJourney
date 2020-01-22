@@ -8,7 +8,7 @@ export default ({ data }) => {
   const event = data.eventsYaml;
   return (
     <Layout>
-      <SEO title={event.eventName}/>
+      <SEO title={event.eventName} />
       <h1 className="text-2xl my-2">{event.eventName}</h1>
       <p>{event.eventDescription}</p>
     </Layout>
