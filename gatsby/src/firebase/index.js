@@ -11,10 +11,14 @@ class Firebase {
       );
       app.then(async app => {
         app.initializeApp(firebaseConfig);
-        await import(/* webpackChunkName: "firebase-auth" */ "firebase/auth");
-        await import(
-          /* webpackChunkName: "firebase-firestore" */ "firebase/firestore"
-        );
+        await Promise.all([
+          import(
+            /* webpackChunkName: "firebase-auth", webpackPreload: true */ "firebase/auth"
+          ),
+          import(
+            /* webpackChunkName: "firebase-firestore", webpackPreload: true */ "firebase/firestore"
+          )
+        ]);
         this.app = app;
         this.q.forEach(callback => callback(this.app));
       });
