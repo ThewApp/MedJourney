@@ -10,7 +10,10 @@ const IndexPage = () => (
     <Cover />
     <div className="container mx-auto flex flex-col sm:flex-row items-center justify-center mt-6">
       <div className="max-w-sm mx-4 my-6">
-        <h1 className="text-lg md:text-2xl text-primary-700 mb-4">เปิดรั้วคณะแพทยศาสตร์ <span className="whitespace-no-wrap">จุฬาลงกรณ์มหาวิทยาลัย</span></h1>
+        <h1 className="text-lg md:text-2xl text-primary-700 mb-4">
+          เปิดรั้วคณะแพทยศาสตร์{" "}
+          <span className="whitespace-no-wrap">จุฬาลงกรณ์มหาวิทยาลัย</span>
+        </h1>
         <p>
           กิจกรรมสุดพิเศษ 2 วันเต็ม ที่จะทำให้ทุก ๆ คนได้รู้ลึก รู้จริง
           รู้ทุกเรื่องเกี่ยวกับคณะแพทย์ จุฬาฯ
