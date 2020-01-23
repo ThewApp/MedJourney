@@ -19,6 +19,7 @@ const Layout = ({ children }) => {
       site {
         siteMetadata {
           title
+          shortTitle
           facebook
         }
       }
@@ -26,9 +27,12 @@ const Layout = ({ children }) => {
   `);
 
   return (
-    <div className="antialiased">
-      <Header siteTitle={data.site.siteMetadata.title} />
-      <main>{children}</main>
+    <div className="antialiased min-h-screen flex flex-col">
+      <Header
+        siteTitle={data.site.siteMetadata.title}
+        siteShortTitle={data.site.siteMetadata.shortTitle}
+      />
+      <main className="flex-auto">{children}</main>
       <Footer facebook={data.site.siteMetadata.facebook} />
     </div>
   );

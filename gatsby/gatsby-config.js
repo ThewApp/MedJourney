@@ -2,7 +2,7 @@ module.exports = {
   siteMetadata: {
     title: `MDCU Open House 2020 : MedJourney`,
     shortTitle: `MedJourney`,
-    description: `MedJourney กิจกรรม Open House คณะแพทยศาสตร์ จุฬาลงกรณ์มหาวิทยาลัย 2 วันเต็ม`,
+    description: `MedJourney กิจกรรม Open House เปิดรั้วคณะแพทยศาสตร์ จุฬาลงกรณ์มหาวิทยาลัย 2 วันเต็ม`,
     author: `@mdcuopenhouse`,
     facebook: `https://facebook.com/mdcuopenhouse`
   },
