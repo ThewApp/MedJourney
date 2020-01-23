@@ -4,4 +4,25 @@
  * See: https://www.gatsbyjs.org/docs/node-apis/
  */
 
-// You can delete this file if you're not using it
+const path = require(`path`);
+
+exports.createPages = async ({ graphql, actions }) => {
+  const result = await graphql(`
+    query {
+      allEventsYaml {
+        nodes {
+          eventPath
+        }
+      }
+    }
+  `);
+  result.data.allEventsYaml.nodes.forEach(({ eventPath }) => {
+    actions.createPage({
+      path: `/events/${eventPath}`,
+      component: path.resolve(`./src/templates/event.js`),
+      context: {
+        eventPath
+      }
+    });
+  });
+};

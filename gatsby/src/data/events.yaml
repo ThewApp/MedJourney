@@ -1,0 +1,138 @@
+# - eventId: Anatomy
+#   eventName: โครงสร้างแห่งชีวิต (Aedificium Humanis - Anatomy of Life)
+#   eventPath: โครงสร้างแห่งชีวิต-Aedificium-Humanis-Anatomy-of-Life
+#   eventShortDescription: TBD
+#   eventDescription: to be determined
+#   roundInfo:
+#     name: ทำเฝือก
+#     duration: 30
+#     booking: 60
+#     walkIn: 40
+#     capacity: 120
+#     requirements: ต้องมาถึงหน้าโครงการก่อนเวลาเริ่มต้นกิจกรรมในรอบนั้น ๆ 15 นาที
+#   rounds:
+#     - id: 101
+#       startTime: 2020-03-21 08:00
+#     - id: 102
+#       startTime: 2020-03-21 08:30
+#     - id: 103
+#       startTime: 2020-03-21 09:00
+- eventId: MIS
+  eventName: Through the Looking Glass (Minimally Invasive Surgery)
+  eventPath: Through-the-Looking-Glass-(Minimally-Invasive-Surgery)
+  eventShortDescription: TBD
+  eventDescription: to be determined
+
+- eventId: Neuroscience
+  eventName: The Miracle of the Brain
+  eventPath: The-Miracle-of-the-Brain
+  eventShortDescription: TBD
+  eventDescription: to be determined
+
+- eventId: SexEducation
+  eventName: When Sex Goes to School (Sex Education)
+  eventPath: When-Sex-Goes-to-School-(Sex-Education)
+  eventShortDescription: TBD
+  eventDescription: to be determined
+
+- eventId: BLS
+  eventName: "BLS : Be a Life Saver"
+  eventPath: BLS-Be-a-Life-Saver
+  eventShortDescription: TBD
+  eventDescription: to be determined
+
+- eventId: Guidance
+  eventName: Road(s) 2 MDCU
+  eventPath: Road(s)-to-MDCU
+  eventShortDescription: TBD
+  eventDescription: to be determined
+
+- eventId: PlasticSurgery
+  eventName: Behind the Secret of Beauty
+  eventPath: Behind-the-Secret-of-Beauty
+  eventShortDescription: TBD
+  eventDescription: to be determined
+
+- eventId: Skin
+  eventName: The Secrets of Skin Aging
+  eventPath: The-Secrets-of-Skin-Aging
+  eventShortDescription: TBD
+  eventDescription: to be determined
+
+- eventId: Eye
+  eventName: When Your Eyes Meet Mine
+  eventPath: When-Your-Eyes-Meet-Mine
+  eventShortDescription: TBD
+  eventDescription: to be determined
+
+- eventId: Orthopedics
+  eventName: "Secret of the Bone : lettera d’amore"
+  eventPath: Secret-of-the-Bone-lettera-d’amore
+  eventShortDescription: TBD
+  eventDescription: to be determined
+
+- eventId: Transplantation
+  eventName: Transplantation | Giving a Life, Gift of Life
+  eventPath: Transplantation-Giving-a-Life-Gift-of-Life
+  eventShortDescription: TBD
+  eventDescription: to be determined
+
+- eventId: Liver
+  eventName: Amazing Journey Through Liver
+  eventPath: Amazing-Journey-Through-Liver
+  eventShortDescription: TBD
+  eventDescription: to be determined
+
+- eventId: PalliativeCare
+  eventName: Goodbye Diary..ก่อนที่เราจะจากกัน
+  eventPath: Goodbye-Diary..ก่อนที่เราจะจากกัน
+  eventShortDescription: TBD
+  eventDescription: to be determined
+
+- eventId: Stroke
+  eventName: Befast รีบ รอด ปลอดอัมพาต
+  eventPath: Befast-รีบ-รอด-ปลอดอัมพาต
+  eventShortDescription: TBD
+  eventDescription: to be determined
+
+- eventId: Forensic
+  eventName: ความจริงไร้เสียง (Unspoken Truth)
+  eventPath: ความจริงไร้เสียง-(Unspoken-Truth)
+  eventShortDescription: TBD
+  eventDescription: to be determined
+
+- eventId: Psychi
+  eventName: How Are You Today ?
+  eventPath: How-Are-You-Today
+  eventShortDescription: TBD
+  eventDescription: to be determined
+
+- eventId: ENT
+  eventName: มีอะไรในรู – Find the Hole
+  eventPath: มีอะไรในรู-Find-the-Hole
+  eventShortDescription: TBD
+  eventDescription: to be determined
+
+- eventId: Colo
+  eventName: See the Future Through Colon
+  eventPath: See-the-Future-Through-Colon
+  eventShortDescription: TBD
+  eventDescription: to be determined
+
+- eventId: Rehab
+  eventName: Find Your Life, Find Your Balance
+  eventPath: Find-Your-Life-Find-Your-Balance
+  eventShortDescription: TBD
+  eventDescription: to be determined
+
+- eventId: GeneralSurgery
+  eventName: The World of Surgery
+  eventPath: The-World-of-Surgery
+  eventShortDescription: TBD
+  eventDescription: to be determined
+
+- eventId: Anatomy
+  eventName: "โครงสร้างแห่งชีวิต (Aedificium Humanis : Anatomy of Life)"
+  eventPath: โครงสร้างแห่งชีวิต-(Aedificium-Humanis-Anatomy-of-Life)
+  eventShortDescription: TBD
+  eventDescription: to be determined

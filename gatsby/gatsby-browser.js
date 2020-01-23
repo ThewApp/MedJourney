@@ -3,7 +3,10 @@
  *
  * See: https://www.gatsbyjs.org/docs/browser-apis/
  */
+import React from "react";
 
+import { LocationProvider } from "./src/context/location";
+import { UserProvider } from "./src/context/user";
 import { logPageView, initAnalytics } from "./src/firebase/analytics";
 
 export const onInitialClientRender = () => {
@@ -16,3 +19,11 @@ export const onRouteUpdate = ({ prevLocation }) => {
     setTimeout(() => logPageView(), 32);
   }
 };
+
+export const wrapPageElement = ({ element }) => (
+  <LocationProvider>{element}</LocationProvider>
+);
+
+export const wrapRootElement = ({ element }) => (
+  <UserProvider>{element}</UserProvider>
+);

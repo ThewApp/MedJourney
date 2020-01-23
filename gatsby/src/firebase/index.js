@@ -5,13 +5,20 @@ class Firebase {
 
   init() {
     if (typeof window !== "undefined") {
-      const app = import(/* webpackPreload: false */ "firebase/app");
-      const init = fetch("/__/firebase/init.json").then(res => res.json());
-      Promise.all([app, init]).then(async ([app, init]) => {
-        app.initializeApp(init);
-        await import(/* webpackPreload: false */ "firebase/auth");
-        await import(/* webpackPreload: false */ "firebase/firestore");
-        await import(/* webpackPreload: false */ "firebase/remote-config");
+      const firebaseConfig = JSON.parse(process.env.GATSBY_API_FIREBASE);
+      const app = import(
+        /* webpackChunkName: "firebase-app", webpackPreload: true */ "firebase/app"
+      );
+      app.then(async app => {
+        app.initializeApp(firebaseConfig);
+        await Promise.all([
+          import(
+            /* webpackChunkName: "firebase-auth", webpackPreload: true */ "firebase/auth"
+          ),
+          import(
+            /* webpackChunkName: "firebase-firestore", webpackPreload: true */ "firebase/firestore"
+          )
+        ]);
         this.app = app;
         this.q.forEach(callback => callback(this.app));
       });

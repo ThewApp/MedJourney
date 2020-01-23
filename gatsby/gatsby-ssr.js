@@ -6,19 +6,13 @@
 
 import React from "react";
 
-export const onRenderBody = ({ setHeadComponents, setPostBodyComponents }) => {
-  setHeadComponents([
-    <link
-      key="firebaseinit"
-      rel="preload"
-      href="/__/firebase/init.json"
-      as="fetch"
-      crossOrigin="anonymous"
-    ></link>,
-    <link
-      key="firebaseinstallations"
-      rel="preconnect"
-      href="https://firebaseinstallations.googleapis.com"
-    ></link>
-  ]);
-};
+import { LocationProvider } from "./src/context/location";
+import { UserProvider } from "./src/context/user";
+
+export const wrapPageElement = ({ element }) => (
+  <LocationProvider>{element}</LocationProvider>
+);
+
+export const wrapRootElement = ({ element }) => (
+  <UserProvider>{element}</UserProvider>
+);

@@ -8,7 +8,9 @@ export default function() {
   const [functions, setFunctions] = useState({ value: null });
   useEffect(() => {
     getFirebase(firebase => {
-      import("firebase/functions").then(() => {
+      import(
+        /* webpackChunkName: "firebase-functions" */ "firebase/functions"
+      ).then(() => {
         setFunctions({ value: firebase.app().functions.bind(firebase.app()) });
       });
     });

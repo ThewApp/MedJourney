@@ -4,36 +4,42 @@ import { Link, navigate } from "gatsby";
 import Layout from "../components/layout";
 import SEO from "../components/seo";
 import { useAuth } from "../firebase";
-import queryString from "query-string";
+import useUser from "../context/user";
 
-const LoginPage = ({ location }) => {
+const LoginPage = () => {
+  const { authUser } = useUser();
   const auth = useAuth();
   const [loading, setLoading] = useState(false);
 
   const redirectUrl =
-    queryString.parse(location.search).redirect || "/register";
+    typeof window !== "undefined"
+      ? sessionStorage.getItem("loginRedirect") || "/register"
+      : "/register";
 
-  if (auth) {
-    const authListener = auth().onAuthStateChanged(function(user) {
-      if (user) {
-        navigate(redirectUrl, { replace: true });
-      }
-    });
-    if (auth().currentUser) {
-      authListener();
+  useEffect(() => {
+    if (authUser && authUser.uid) {
+      sessionStorage.removeItem("loginRedirect");
       navigate(redirectUrl, { replace: true });
     }
-    auth()
-      .getRedirectResult()
-      .then(function(result) {
-        if (result.user) {
-          navigate(redirectUrl, { replace: true });
-        }
-      })
-      .catch(function(error) {
-        console.error(error);
-      });
-  }
+  }, [authUser, redirectUrl]);
+
+  useEffect(() => {
+    if (auth) {
+      auth()
+        .getRedirectResult()
+        .then(function(result) {
+          if (result.user) {
+            navigate(redirectUrl, { replace: true });
+          } else {
+            setLoading(false);
+          }
+        })
+        .catch(function(error) {
+          setLoading(false);
+          console.error(error);
+        });
+    }
+  }, [auth, redirectUrl]);
 
   useEffect(() => {
     if (sessionStorage.getItem("signInWithRedirect")) {
@@ -49,6 +55,11 @@ const LoginPage = ({ location }) => {
       sessionStorage.setItem("signInWithRedirect", "true");
     }
   }
+
+  useEffect(() => {
+    /* global ___loader */
+    ___loader.enqueue(redirectUrl);
+  }, [redirectUrl]);
 
   return (
     <Layout>
