@@ -4,8 +4,8 @@ import Layout from "../components/layout";
 import SEO from "../components/seo";
 import Cover from "../components/cover";
 
-const IndexPage = () => (
-  <Layout>
+const IndexPage = ({ location }) => (
+  <Layout location={location}>
     <SEO title="Home" />
     <Cover />
     <div className="container mx-auto flex flex-col sm:flex-row items-center justify-center mt-6">

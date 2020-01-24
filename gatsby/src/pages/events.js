@@ -4,9 +4,9 @@ import { Link, graphql } from "gatsby";
 import Layout from "../components/layout";
 import SEO from "../components/seo";
 
-export default ({ data }) => {
+export default ({ data, location }) => {
   return (
-    <Layout>
+    <Layout location={location}>
       <SEO title="กิจกรรม" />
       <h1 className="text-2xl my-2">Amazing Events</h1>
       {data.allEventsYaml.nodes.map(node => (

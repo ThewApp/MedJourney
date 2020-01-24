@@ -1,31 +1,16 @@
-import React, { useState, useEffect } from "react";
-import { Link, navigate } from "gatsby";
+import React, { useState } from "react";
+import { Link } from "gatsby";
 import { useForm } from "react-hook-form";
 
 import Layout from "../components/layout";
 import SEO from "../components/seo";
-import useUser from "../context/user";
 import { useAuth, useFunctions } from "../firebase";
 
 const LegacyLoginPage = ({ location }) => {
-  const { authUser } = useUser();
   const auth = useAuth();
   const functions = useFunctions();
   const { register, handleSubmit, errors, setError } = useForm();
-
   const [submitting, setSubmitting] = useState(false);
-
-  const redirectUrl =
-    typeof window !== "undefined"
-      ? sessionStorage.getItem("loginRedirect") || "/register"
-      : "/register";
-
-  useEffect(() => {
-    if (authUser && authUser.uid) {
-      sessionStorage.removeItem("loginRedirect");
-      navigate(redirectUrl, { replace: true });
-    }
-  }, [authUser, redirectUrl]);
 
   const onSubmit = data => {
     setSubmitting(true);
@@ -43,13 +28,8 @@ const LegacyLoginPage = ({ location }) => {
     );
   };
 
-  useEffect(() => {
-    /* global ___loader */
-    ___loader.enqueue(redirectUrl);
-  }, [redirectUrl]);
-
   return (
-    <Layout>
+    <Layout location={location}>
       <SEO title="ลงทะเบียนด้วยบัตรประชาชน" />
       <div className="w-full max-w-md mx-auto md:shadow-md rounded p-3 sm:p-6 md:p-8 mt-16 mb-32">
         {submitting ? (

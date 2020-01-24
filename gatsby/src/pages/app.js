@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from "react";
-
+import { Link } from "gatsby";
 import QRCode from "qrcode";
 
 import Layout from "../components/layout";
 import SEO from "../components/seo";
-import useUser from "../context/user";
+import useUser from "../stores/user";
 
-const AppPage = () => {
-  const { firestoreUser } = useUser();
+const AppPage = ({ location }) => {
+  const firestoreUser = useUser(state => state.firestoreUser);
+  const userSignOut = useUser(state => state.signOut);
   const [qrcodeUrl, setqrcodeUrl] = useState();
 
   useEffect(() => {
@@ -23,7 +24,7 @@ const AppPage = () => {
   }, [firestoreUser]);
 
   return (
-    <Layout>
+    <Layout location={location} requiredAuth>
       <SEO title="App" />
       {firestoreUser && firestoreUser.shortId ? (
         <div className="container mx-auto">
@@ -36,6 +37,9 @@ const AppPage = () => {
           <p id="shortId" className="text-center">
             {firestoreUser.shortId}
           </p>
+          <Link to="/" onClick={() => userSignOut()}>
+            Sign Out
+          </Link>
         </div>
       ) : (
         "Loading"

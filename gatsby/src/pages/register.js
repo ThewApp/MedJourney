@@ -1,43 +1,25 @@
-import React, { useState, useEffect } from "react";
-import { navigate } from "gatsby";
+import React, { useState } from "react";
+import { useForm } from "react-hook-form";
 
 import Layout from "../components/layout";
 import SEO from "../components/seo";
-import { useForm } from "react-hook-form";
-import useUser from "../context/user";
+import useUser from "../stores/user";
 
-const RegisterPage = () => {
-  const { firestoreUser, updateFirestoreUser } = useUser();
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    if (firestoreUser) {
-      if (firestoreUser.firstName) {
-        navigate("/app", { replace: true });
-      } else {
-        setLoading(false);
-      }
-    }
-  }, [firestoreUser]);
+const RegisterPage = ({ location }) => {
+  const firestoreUserRef = useUser(state => state.firestoreUserRef);
+  const [loading, setLoading] = useState(false);
 
   const { register, handleSubmit, errors } = useForm();
   const onSubmit = data => {
-    if (firestoreUser) {
-      setLoading(true);
-      updateFirestoreUser({
-        firstName: data.firstName,
-        lastName: data.lastName
-      });
-    }
+    setLoading(true);
+    firestoreUserRef.update({
+      firstName: data.firstName,
+      lastName: data.lastName
+    });
   };
 
-  useEffect(() => {
-    /* global ___loader */
-    ___loader.enqueue("/app");
-  }, []);
-
   return (
-    <Layout>
+    <Layout location={location}>
       <SEO title="กรอกข้อมูลส่วนตัว" />
       <div className="w-full max-w-md mx-auto md:shadow-md rounded p-3 sm:p-6 md:p-8 mt-16 mb-32">
         {loading ? (

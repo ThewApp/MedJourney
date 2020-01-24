@@ -12,8 +12,9 @@ import { useStaticQuery, graphql } from "gatsby";
 import "./tailwind.css";
 import Header from "./header";
 import Footer from "./footer";
+import User from "./user";
 
-const Layout = ({ children }) => {
+const Layout = ({ children, location, requiredAuth = false }) => {
   const data = useStaticQuery(graphql`
     query SiteTitleQuery {
       site {
@@ -28,9 +29,11 @@ const Layout = ({ children }) => {
 
   return (
     <div className="antialiased min-h-screen flex flex-col">
+      <User location={location} requiredAuth={requiredAuth} />
       <Header
         siteTitle={data.site.siteMetadata.title}
         siteShortTitle={data.site.siteMetadata.shortTitle}
+        requiredAuth={requiredAuth}
       />
       <main className="flex-auto">{children}</main>
       <Footer facebook={data.site.siteMetadata.facebook} />
@@ -39,7 +42,9 @@ const Layout = ({ children }) => {
 };
 
 Layout.propTypes = {
-  children: PropTypes.node.isRequired
+  children: PropTypes.node.isRequired,
+  location: PropTypes.object.isRequired,
+  requiredAuth: PropTypes.bool
 };
 
 export default Layout;
