@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { graphql } from "gatsby";
 
 import Layout from "../components/layout";
 import SEO from "../components/seo";
@@ -89,7 +90,9 @@ function Stamp({ userShortId, staff, onSuccess }) {
   );
 }
 
-function Booking({ userShortId, staff, onSuccess }) {}
+function Booking({ userShortId, staff, onSuccess }) {
+  return null;
+}
 
 const StaffPage = ({ location, data }) => {
   const firestore = useFirestore();
