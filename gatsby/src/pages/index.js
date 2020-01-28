@@ -10,7 +10,7 @@ const IndexPage = ({ location }) => (
     <Cover />
     <div className="container mx-auto flex flex-col sm:flex-row items-center justify-center mt-6">
       <div className="max-w-sm mx-4 my-6">
-        <h1 className="text-lg md:text-2xl text-primary-700 mb-4">
+        <h1 className="text-lg md:text-2xl font-medium text-primary-700 mb-4">
           เปิดรั้วคณะแพทยศาสตร์{" "}
           <span className="whitespace-no-wrap">จุฬาลงกรณ์มหาวิทยาลัย</span>
         </h1>

@@ -1,5 +1,8 @@
-@tailwind base;
+@import "../fonts/index.css";
 
-@tailwind components;
+@import "tailwindcss/base";
+@import "tailwindcss/components";
 
-@tailwind utilities;
+@import "./spinner";
+
+@import "tailwindcss/utilities";

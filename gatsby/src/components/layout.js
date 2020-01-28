@@ -28,7 +28,7 @@ const Layout = ({ children, location, requiredAuth = false }) => {
   `);
 
   return (
-    <div className="antialiased min-h-screen flex flex-col">
+    <div className="font-sans	antialiased min-h-screen flex flex-col">
       <User location={location} requiredAuth={requiredAuth} />
       <Header
         siteTitle={data.site.siteMetadata.title}

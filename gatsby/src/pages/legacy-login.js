@@ -4,6 +4,7 @@ import { useForm } from "react-hook-form";
 
 import Layout from "../components/layout";
 import SEO from "../components/seo";
+import Spinner from "../components/spinner";
 import { useAuth, useFunctions } from "../firebase";
 
 const LegacyLoginPage = ({ location }) => {
@@ -33,7 +34,7 @@ const LegacyLoginPage = ({ location }) => {
       <SEO title="ลงทะเบียนด้วยบัตรประชาชน" />
       <div className="w-full max-w-md mx-auto md:shadow-md rounded p-3 sm:p-6 md:p-8 mt-16 mb-32">
         {submitting ? (
-          <p className="text-center">กำลังลงทะเบียน</p>
+          <Spinner />
         ) : (
           <>
             <h1 className="font-bold text-lg mb-4">

@@ -50,8 +50,26 @@ module.exports = {
         "900": "#28230B"
       }
     },
+    fontFamily: {
+      sans: [
+        "Inter",
+        "-apple-system",
+        "BlinkMacSystemFont",
+        '"Segoe UI"',
+        "Roboto",
+        '"Helvetica Neue"',
+        "Arial",
+        '"Noto Sans"',
+        '"Bai Jamjuree"',
+        "serif",
+        '"Apple Color Emoji"',
+        '"Segoe UI Emoji"',
+        '"Segoe UI Symbol"',
+        '"Noto Color Emoji"'
+      ]
+    },
     extend: {}
   },
   variants: {},
-  plugins: []
+  plugins: [require("@tailwindcss/custom-forms")]
 };

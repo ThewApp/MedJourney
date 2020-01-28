@@ -3,6 +3,7 @@ import { Link } from "gatsby";
 
 import Layout from "../components/layout";
 import SEO from "../components/seo";
+import Spinner from "../components/spinner";
 import { useAuth } from "../firebase";
 
 const LoginPage = ({ location }) => {
@@ -45,7 +46,7 @@ const LoginPage = ({ location }) => {
       <SEO title="ลงทะเบียนด้วย Facebook" />
       <div className="w-full max-w-md mx-auto md:shadow-md rounded p-3 sm:p-6 md:p-8 mt-16 mb-32 text-center">
         {loading ? (
-          "กำลังโหลด..."
+          <Spinner />
         ) : (
           <>
             <button

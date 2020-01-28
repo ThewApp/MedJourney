@@ -4,6 +4,7 @@ import QRCode from "qrcode";
 
 import Layout from "../components/layout";
 import SEO from "../components/seo";
+import Spinner from "../components/spinner";
 import useUser from "../stores/user";
 
 const AppPage = ({ location }) => {
@@ -42,7 +43,7 @@ const AppPage = ({ location }) => {
           </Link>
         </div>
       ) : (
-        "Loading"
+        <Spinner />
       )}
     </Layout>
   );

@@ -14,8 +14,8 @@ function User({ requiredAuth, location }) {
     /* global ___loader */
     const isRegisterPage = /^\/register\/?$/.test(location.pathname);
     const isLoginPage = /^\/(login|legacy-login)\/?$/.test(location.pathname);
-    const needRegister = firestoreUser && !firestoreUser.firstName;
-    if (isLoginPage && authUser) {
+    const needRegister = firestoreUser && !firestoreUser.name;
+    if (isLoginPage && authUser && firestoreUser) {
       if (needRegister) {
         navigate("/register", { replace: true });
       } else {
@@ -23,7 +23,7 @@ function User({ requiredAuth, location }) {
       }
     }
 
-    if (isRegisterPage && !needRegister) {
+    if (isRegisterPage && firestoreUser && !needRegister) {
       navigate(pendingRedirect || "/app", { replace: true });
     }
 
