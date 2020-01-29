@@ -60,6 +60,7 @@ module.exports = {
         '"Helvetica Neue"',
         "Arial",
         '"Noto Sans"',
+        '"Noto Sans Thai"',
         '"Bai Jamjuree"',
         "serif",
         '"Apple Color Emoji"',
