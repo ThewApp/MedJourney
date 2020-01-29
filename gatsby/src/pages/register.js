@@ -121,10 +121,10 @@ const TextInput = React.forwardRef(
 );
 
 const RadioGroup = React.forwardRef(
-  ({ label, name, options, other, forms }, ref) => {
-    const otherName = typeof other === "string" ? other : name + "_other";
+  ({ label, name, options, others, forms }, ref) => {
+    const othersName = typeof others === "string" ? others : name + "_others";
     const error = getByPath(forms.errors, name);
-    const otherError = getByPath(forms.errors, otherName);
+    const othersError = getByPath(forms.errors, othersName);
     return (
       <div className="mb-4">
         <p className="block text-gray-700 font-medium mb-2">{label}</p>
@@ -140,7 +140,7 @@ const RadioGroup = React.forwardRef(
             <span className="ml-1">{option}</span>
           </label>
         ))}
-        {other && (
+        {others && (
           <div className="inline-block">
             <label className="inline-flex mx-2 py-3">
               <input
@@ -148,14 +148,14 @@ const RadioGroup = React.forwardRef(
                 className="form-radio mt-1"
                 name={name}
                 ref={ref}
-                value="อื่นๆ"
+                value="อื่น ๆ"
               />
-              <span className="ml-1">อื่นๆ</span>
+              <span className="ml-1">อื่น ๆ</span>
             </label>
-            {forms.watch(name) === "อื่นๆ" && (
+            {forms.watch(name) === "อื่น ๆ" && (
               <input
                 className="form-input"
-                name={otherName}
+                name={othersName}
                 ref={ref}
                 placeholder="โปรดระบุ"
               />
@@ -163,59 +163,69 @@ const RadioGroup = React.forwardRef(
           </div>
         )}
         <ErrorMessage error={error} />
-        <ErrorMessage error={otherError} />
+        <ErrorMessage error={othersError} />
       </div>
     );
   }
 );
 
 const Select = React.forwardRef(
-  ({ label, name, options, other, forms }, ref) => {
-    const otherName = typeof other === "string" ? other : name + "_other";
+  ({ label, name, options, others, forms }, ref) => {
+    const othersName = typeof others === "string" ? others : name + "_others";
     const error = getByPath(forms.errors, name);
-    const otherError = getByPath(forms.errors, otherName);
+    const othersError = getByPath(forms.errors, othersName);
     return (
       <div className="mb-4">
         <label className="block text-gray-700 font-medium mb-2" htmlFor={name}>
           {label}
         </label>
-        <select className="form-select block w-full" name={name} ref={ref}>
+        <select
+          className="form-select block w-full"
+          id={name}
+          name={name}
+          ref={ref}
+        >
           {options.map(option => (
             <option key={option} value={option}>
               {option}
             </option>
           ))}
 
-          {other && (
-            <option key="other" value="อื่นๆ">
-              อื่นๆ
+          {others && (
+            <option key="others" value="อื่น ๆ">
+              อื่น ๆ
             </option>
           )}
         </select>
 
-        {forms.watch(name) === "อื่นๆ" && (
+        {forms.watch(name) === "อื่น ๆ" && (
           <input
             className="form-input"
-            name={otherName}
+            name={othersName}
             ref={ref}
             placeholder="โปรดระบุ"
           />
         )}
         <ErrorMessage error={error} />
-        <ErrorMessage error={otherError} />
+        <ErrorMessage error={othersError} />
       </div>
     );
   }
 );
 
 const Checks = React.forwardRef(
-  ({ label, name, options, other, forms }, ref) => {
-    const otherName = typeof other === "string" ? other : name + "_other";
+  ({ label, name, options, others, forms }, ref) => {
+    const othersName = typeof others === "string" ? others : name + "_others";
     const error = getByPath(forms.errors, name);
-    const otherError = getByPath(forms.errors, otherName);
+    const othersError = getByPath(forms.errors, othersName);
     return (
       <div className="mb-4">
-        <p className="block text-gray-700 font-medium mb-2">{label}</p>
+        <p className="block text-gray-700 font-medium mb-2">
+          {label}{" "}
+          <span className="font-normal text-gray-500 whitespace-no-wrap">
+            (ระบุได้มากกว่า 1 ข้อ)
+          </span>
+        </p>
         {options.map(option => (
           <label className="flex mx-2 my-1" key={option}>
             <input
@@ -228,7 +238,7 @@ const Checks = React.forwardRef(
             <span className="ml-1">{option}</span>
           </label>
         ))}
-        {other && (
+        {others && (
           <div className="block">
             <label className="inline-flex mx-2 py-3">
               <input
@@ -236,14 +246,14 @@ const Checks = React.forwardRef(
                 className="form-checkbox mt-1"
                 name={name}
                 ref={ref}
-                value="อื่นๆ"
+                value="อื่น ๆ"
               />
-              <span className="ml-1">อื่นๆ</span>
+              <span className="ml-1">อื่น ๆ</span>
             </label>
-            {forms.watch(name)?.includes("อื่นๆ") && (
+            {forms.watch(name)?.includes("อื่น ๆ") && (
               <input
                 className="form-input"
-                name={otherName}
+                name={othersName}
                 ref={ref}
                 placeholder="โปรดระบุ"
               />
@@ -251,7 +261,7 @@ const Checks = React.forwardRef(
           </div>
         )}
         <ErrorMessage error={error} />
-        <ErrorMessage error={otherError} />
+        <ErrorMessage error={othersError} />
       </div>
     );
   }
@@ -273,7 +283,7 @@ const RegisterPage = ({ location }) => {
       .collection("userData")
       .doc("registration")
       .set({
-        gender: data.gender_other || data.gender,
+        gender: data.gender_others || data.gender,
         age: data.age,
         job: data.job
       });
@@ -303,7 +313,7 @@ const RegisterPage = ({ location }) => {
         options={["วิทย์-คณิต", "ศิลป์-คำนวณ", "ศิลป์-ภาษา", "Gifted"]}
         ref={register({ required: true })}
         forms={forms}
-        other
+        others
       />
       <TextInput
         label="โรงเรียน"
@@ -388,7 +398,7 @@ const RegisterPage = ({ location }) => {
               <RadioGroup
                 label="เพศ"
                 name="gender"
-                options={["ชาย", "หญิง", "อื่นๆ"]}
+                options={["ชาย", "หญิง", "อื่น ๆ"]}
                 ref={register({ required: true })}
                 forms={forms}
               />
@@ -449,7 +459,7 @@ const RegisterPage = ({ location }) => {
                 ]}
                 ref={register({ required: true })}
                 forms={forms}
-                other
+                others
               />
 
               <Checks
@@ -465,12 +475,12 @@ const RegisterPage = ({ location }) => {
                 ]}
                 ref={register({ required: true })}
                 forms={forms}
-                other
+                others
               />
 
               <div className="flex items-center justify-end">
                 <button
-                  className="my-2 bg-primary-600 hover:bg-primary-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                  className="my-2 bg-primary-600 hover:bg-primary-700 text-white font-bold py-2 px-5 rounded focus:outline-none focus:shadow-outline"
                   type="submit"
                 >
                   บันทึก
