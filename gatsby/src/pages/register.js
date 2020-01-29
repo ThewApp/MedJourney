@@ -9,8 +9,97 @@ import useUser from "../stores/user";
 const getByPath = (obj, path) =>
   path.split(/[[\].]/).reduce((obj, key) => obj?.[key], obj);
 
+const provinces = [
+  "กรุงเทพมหานคร",
+  "กระบี่",
+  "กาญจนบุรี",
+  "กาฬสินธุ์",
+  "กำแพงเพชร",
+  "ขอนแก่น",
+  "จันทบุรี",
+  "ฉะเชิงเทรา",
+  "ชลบุรี",
+  "ชัยนาท",
+  "ชัยภูมิ",
+  "ชุมพร",
+  "เชียงใหม่",
+  "เชียงราย",
+  "ตรัง",
+  "ตราด",
+  "ตาก",
+  "นครนายก",
+  "นครปฐม",
+  "นครพนม",
+  "นครราชสีมา",
+  "นครศรีธรรมราช",
+  "นครสวรรค์",
+  "นนทบุรี",
+  "นราธิวาส",
+  "น่าน",
+  "บึงกาฬ",
+  "บุรีรัมย์",
+  "ปทุมธานี",
+  "ประจวบคีรีขันธ์",
+  "ปราจีนบุรี",
+  "ปัตตานี",
+  "พระนครศรีอยุธยา",
+  "พะเยา",
+  "พังงา",
+  "พัทลุง",
+  "พิจิตร",
+  "พิษณุโลก",
+  "เพชรบุรี",
+  "เพชรบูรณ์",
+  "แพร่",
+  "ภูเก็ต",
+  "มหาสารคาม",
+  "มุกดาหาร",
+  "แม่ฮ่องสอน",
+  "ยโสธร",
+  "ยะลา",
+  "ร้อยเอ็ด",
+  "ระนอง",
+  "ระยอง",
+  "ราชบุรี",
+  "ลพบุรี",
+  "ลำปาง",
+  "ลำพูน",
+  "เลย",
+  "ศรีสะเกษ",
+  "สกลนคร",
+  "สงขลา",
+  "สตูล",
+  "สมุทรปราการ",
+  "สมุทรสงคราม",
+  "สมุทรสาคร",
+  "สระแก้ว",
+  "สระบุรี",
+  "สิงห์บุรี",
+  "สุโขทัย",
+  "สุพรรณบุรี",
+  "สุราษฎร์ธานี",
+  "สุรินทร์",
+  "หนองคาย",
+  "หนองบัวลำภู",
+  "อ่างทอง",
+  "อำนาจเจริญ",
+  "อุดรธานี",
+  "อุตรดิตถ์",
+  "อุทัยธานี",
+  "อุบลราชธานี"
+];
+
+const ErrorMessage = ({ error }) => {
+  return error ? (
+    <div className="text-sm text-primary-400">
+      {error?.type === "required" && <p>กรุณาระบุ</p>}
+      {error?.message && <p>{error?.message}</p>}
+    </div>
+  ) : null;
+};
+
 const TextInput = React.forwardRef(
-  ({ label, name, forms, placeholder }, ref) => {
+  ({ label, name, forms, placeholder, type }, ref) => {
     const error = getByPath(forms.errors, name);
     return (
       <div className="mb-4">
@@ -23,13 +112,9 @@ const TextInput = React.forwardRef(
           name={name}
           ref={ref}
           placeholder={placeholder}
+          type={type || "text"}
         />
-        {error?.type === "required" && (
-          <p className="text-sm text-primary-400">จำเป็นต้องใส่</p>
-        )}
-        {error?.message && (
-          <p className="text-sm text-primary-400">{error?.message}</p>
-        )}
+        <ErrorMessage error={error} />
       </div>
     );
   }
@@ -44,10 +129,10 @@ const RadioGroup = React.forwardRef(
       <div className="mb-4">
         <p className="block text-gray-700 font-medium mb-2">{label}</p>
         {options.map(option => (
-          <label className="inline-block mx-2" key={option}>
+          <label className="inline-flex mx-2 my-1" key={option}>
             <input
               type="radio"
-              className="form-radio"
+              className="form-radio mt-1"
               name={name}
               ref={ref}
               value={option}
@@ -56,11 +141,11 @@ const RadioGroup = React.forwardRef(
           </label>
         ))}
         {other && (
-          <div className="inline-block mx-2">
-            <label className="inline-block mx-2 py-3">
+          <div className="inline-block">
+            <label className="inline-flex mx-2 py-3">
               <input
                 type="radio"
-                className="form-radio"
+                className="form-radio mt-1"
                 name={name}
                 ref={ref}
                 value="อื่นๆ"
@@ -77,15 +162,96 @@ const RadioGroup = React.forwardRef(
             )}
           </div>
         )}
+        <ErrorMessage error={error} />
+        <ErrorMessage error={otherError} />
+      </div>
+    );
+  }
+);
 
-        {(error?.type === "required" || otherError?.type === "required") && (
-          <p className="text-sm text-primary-400">จำเป็นต้องใส่</p>
+const Select = React.forwardRef(
+  ({ label, name, options, other, forms }, ref) => {
+    const otherName = typeof other === "string" ? other : name + "_other";
+    const error = getByPath(forms.errors, name);
+    const otherError = getByPath(forms.errors, otherName);
+    return (
+      <div className="mb-4">
+        <label className="block text-gray-700 font-medium mb-2" htmlFor={name}>
+          {label}
+        </label>
+        <select className="form-select block w-full" name={name} ref={ref}>
+          {options.map(option => (
+            <option key={option} value={option}>
+              {option}
+            </option>
+          ))}
+
+          {other && (
+            <option key="other" value="อื่นๆ">
+              อื่นๆ
+            </option>
+          )}
+        </select>
+
+        {forms.watch(name) === "อื่นๆ" && (
+          <input
+            className="form-input"
+            name={otherName}
+            ref={ref}
+            placeholder="โปรดระบุ"
+          />
         )}
-        {(error?.message || otherError?.message) && (
-          <p className="text-sm text-primary-400">
-            {error?.message || otherError?.message}
-          </p>
+        <ErrorMessage error={error} />
+        <ErrorMessage error={otherError} />
+      </div>
+    );
+  }
+);
+
+const Checks = React.forwardRef(
+  ({ label, name, options, other, forms }, ref) => {
+    const otherName = typeof other === "string" ? other : name + "_other";
+    const error = getByPath(forms.errors, name);
+    const otherError = getByPath(forms.errors, otherName);
+    return (
+      <div className="mb-4">
+        <p className="block text-gray-700 font-medium mb-2">{label}</p>
+        {options.map(option => (
+          <label className="flex mx-2 my-1" key={option}>
+            <input
+              type="checkbox"
+              className="form-checkbox mt-1"
+              name={name}
+              ref={ref}
+              value={option}
+            />
+            <span className="ml-1">{option}</span>
+          </label>
+        ))}
+        {other && (
+          <div className="block">
+            <label className="inline-flex mx-2 py-3">
+              <input
+                type="checkbox"
+                className="form-checkbox mt-1"
+                name={name}
+                ref={ref}
+                value="อื่นๆ"
+              />
+              <span className="ml-1">อื่นๆ</span>
+            </label>
+            {forms.watch(name)?.includes("อื่นๆ") && (
+              <input
+                className="form-input"
+                name={otherName}
+                ref={ref}
+                placeholder="โปรดระบุ"
+              />
+            )}
+          </div>
         )}
+        <ErrorMessage error={error} />
+        <ErrorMessage error={otherError} />
       </div>
     );
   }
@@ -108,16 +274,99 @@ const RegisterPage = ({ location }) => {
       .doc("registration")
       .set({
         gender: data.gender_other || data.gender,
-        age: data.age
+        age: data.age,
+        job: data.job
       });
   };
 
   console.log(watch(), errors);
 
+  const schoolForm = (
+    <>
+      <Select
+        label="ระดับชั้น"
+        name="school.grade"
+        options={[
+          "มัธยมศึกษาปีที่ 6",
+          "มัธยมศึกษาปีที่ 5",
+          "มัธยมศึกษาปีที่ 4",
+          "มัธยมศึกษาตอนต้น",
+          "ประถมศึกษาตอนปลาย",
+          "ประถมศึกษาตอนต้น หรือ ต่ำกว่า"
+        ]}
+        ref={register({ required: true })}
+        forms={forms}
+      />
+      <RadioGroup
+        label="แผนการเรียน"
+        name="school.major"
+        options={["วิทย์-คณิต", "ศิลป์-คำนวณ", "ศิลป์-ภาษา", "Gifted"]}
+        ref={register({ required: true })}
+        forms={forms}
+        other
+      />
+      <TextInput
+        label="โรงเรียน"
+        name="school.name"
+        ref={register({ required: true })}
+        forms={forms}
+      />
+      <Select
+        label="จังหวัดของโรงเรียน"
+        name="school.province"
+        options={provinces}
+        ref={register({ required: true })}
+        forms={forms}
+      />
+    </>
+  );
+
+  const universityForm = (
+    <>
+      <Select
+        label="ชั้นปี"
+        name="university.year"
+        options={["ปี 1", "ปี 2", "ปี 3", "ปี 4", "ปี 5", "ปี 6"]}
+        ref={register({ required: true })}
+        forms={forms}
+      />
+      <TextInput
+        label="คณะ"
+        name="university.major"
+        ref={register({ required: true })}
+        forms={forms}
+      />
+      <TextInput
+        label="มหาวิทยาลัย"
+        name="university.name"
+        ref={register({ required: true })}
+        forms={forms}
+      />
+      <Select
+        label="จังหวัดของมหาวิทยาลัย"
+        name="university.province"
+        options={provinces}
+        ref={register({ required: true })}
+        forms={forms}
+      />
+    </>
+  );
+
+  const parentForm = (
+    <>
+      <TextInput
+        label="อาชีพ/สายงานที่ปฏิบัติอยู่"
+        name="parent.field"
+        ref={register({ required: true })}
+        forms={forms}
+      />
+    </>
+  );
+
   return (
-    <Layout location={location}>
+    <Layout location={location} requiredAuth>
       <SEO title="กรอกข้อมูลส่วนตัว" />
-      <div className="w-full max-w-lg mx-auto md:shadow-md rounded p-3 sm:p-6 md:p-8 mt-16 mb-32">
+      <div className="w-full max-w-lg mx-auto md:shadow-md rounded p-3 sm:p-4 md:p-5 mt-8 mb-12">
         {loading ? (
           <Spinner />
         ) : (
@@ -139,16 +388,83 @@ const RegisterPage = ({ location }) => {
               <RadioGroup
                 label="เพศ"
                 name="gender"
-                options={["ชาย", "หญิง"]}
+                options={["ชาย", "หญิง", "อื่นๆ"]}
                 ref={register({ required: true })}
                 forms={forms}
-                other
               />
               <TextInput
                 label="อายุ"
                 name="age"
                 ref={register({ required: true })}
                 forms={forms}
+                type="number"
+              />
+              <RadioGroup
+                label="อาชีพ"
+                name="job"
+                options={[
+                  "นักเรียน",
+                  "นิสิต/นักศึกษา",
+                  "ผู้ปกครอง",
+                  "บุคคลทั่วไป"
+                ]}
+                ref={register({ required: true })}
+                forms={forms}
+              />
+
+              {watch("job") === "นักเรียน" && schoolForm}
+              {watch("job") === "นิสิต/นักศึกษา" && universityForm}
+              {(watch("job") === "ผู้ปกครอง" ||
+                watch("job") === "บุคคลทั่วไป") &&
+                parentForm}
+
+              <TextInput
+                label="จังหวัดที่พักอาศัย"
+                name="province"
+                ref={register({ required: true })}
+                forms={forms}
+              />
+
+              {watch("job") === "นักเรียน" && (
+                <TextInput
+                  label="คณะที่อยากเข้ามากที่สุด ณ ปัจจุบัน"
+                  name="school.faculty"
+                  ref={register({ required: true })}
+                  forms={forms}
+                />
+              )}
+
+              <Checks
+                label="ท่านทราบข่าวเกี่ยวกับการจัดงานนี้จากช่องทางใด"
+                name="referrer"
+                options={[
+                  "Facebook",
+                  "Instagram (IG story)",
+                  "เพื่อนบอก",
+                  "พ่อแม่บอก",
+                  "เว็บไซต์ MDCU Open House",
+                  "ฝ่ายแนะแนวของโรงเรียน",
+                  "โปสเตอร์ตามสถาบันสอนพิเศษ"
+                ]}
+                ref={register({ required: true })}
+                forms={forms}
+                other
+              />
+
+              <Checks
+                label="สิ่งที่คาดหวังว่าจะได้รับจากการมาร่วมงานนี้"
+                name="expectation"
+                options={[
+                  "ความรู้เกี่ยวกับโรคและวิธีรักษา",
+                  "ความรู้เกี่ยวกับนวัตกรรมในการรักษาผู้ป่วยแบบใหม่",
+                  "ได้พูดคุยกับอาจารย์แพทย์",
+                  "ข้อมูลเกี่ยวกับการเรียนต่อในคณะแพทยศาสตร์ จุฬาฯ",
+                  "ข้อมูลเกี่ยวกับการศึกษาต่อในวิชาแพทยศาสตร์",
+                  "มีเกมส์และกิจกรรมลุ้นรางวัลให้ได้เข้าร่วม",
+                ]}
+                ref={register({ required: true })}
+                forms={forms}
+                other
               />
 
               <div className="flex items-center justify-end">
