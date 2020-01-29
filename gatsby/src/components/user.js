@@ -27,13 +27,13 @@ function User({ requiredAuth, location }) {
       navigate(pendingRedirect || "/app", { replace: true });
     }
 
-    if (requiredAuth && authUser === null) {
+    if (requiredAuth && authUser === null && !isLoginPage) {
       ___loader.enqueue(location.pathname);
       setPendingRedirect(location.pathname);
       navigate("/login", { replace: true });
     }
 
-    if (requiredAuth && needRegister) {
+    if (requiredAuth && needRegister && !isRegisterPage) {
       ___loader.enqueue(location.pathname);
       setPendingRedirect(location.pathname);
       navigate("/register", { replace: true });
