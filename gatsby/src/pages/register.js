@@ -418,9 +418,10 @@ const RegisterPage = ({ location }) => {
                 watch("job") === "บุคคลทั่วไป") &&
                 parentForm}
 
-              <TextInput
+              <Select
                 label="จังหวัดที่พักอาศัย"
                 name="province"
+                options={provinces}
                 ref={register({ required: true })}
                 forms={forms}
               />
