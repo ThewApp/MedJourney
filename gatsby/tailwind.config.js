@@ -52,6 +52,7 @@ module.exports = {
     },
     fontFamily: {
       sans: [
+        '"Bai Jamjuree"',
         "Inter",
         "-apple-system",
         "BlinkMacSystemFont",
@@ -60,8 +61,6 @@ module.exports = {
         '"Helvetica Neue"',
         "Arial",
         '"Noto Sans"',
-        '"Noto Sans Thai"',
-        '"Bai Jamjuree"',
         "serif",
         '"Apple Color Emoji"',
         '"Segoe UI Emoji"',
