@@ -4,13 +4,12 @@ import { useForm } from "react-hook-form";
 import Layout from "../components/layout";
 import SEO from "../components/seo";
 import Spinner from "../components/spinner";
+import { TextInput, RadioGroup, Checks, Select } from "../components/inputs";
 import useUser from "../stores/user";
-
-const getByPath = (obj, path) =>
-  path.split(/[[\].]/).reduce((obj, key) => obj?.[key], obj);
 
 const provinces = [
   "กรุงเทพมหานคร",
+  "ต่างประเทศ",
   "กระบี่",
   "กาญจนบุรี",
   "กาฬสินธุ์",
@@ -89,207 +88,43 @@ const provinces = [
   "อุบลราชธานี"
 ];
 
-const ErrorMessage = ({ error }) => {
-  return error ? (
-    <div className="text-sm text-primary-400">
-      {error?.type === "required" && <p>กรุณาระบุ</p>}
-      {error?.message && <p>{error?.message}</p>}
-    </div>
-  ) : null;
-};
-
-const TextInput = React.forwardRef(
-  ({ label, name, forms, placeholder, type }, ref) => {
-    const error = getByPath(forms.errors, name);
-    return (
-      <div className="mb-4">
-        <label className="block text-gray-700 font-medium mb-2" htmlFor={name}>
-          {label}
-        </label>
-        <input
-          className="form-input w-full"
-          id={name}
-          name={name}
-          ref={ref}
-          placeholder={placeholder}
-          type={type || "text"}
-        />
-        <ErrorMessage error={error} />
-      </div>
-    );
-  }
-);
-
-const RadioGroup = React.forwardRef(
-  ({ label, name, options, others, forms }, ref) => {
-    const othersName = typeof others === "string" ? others : name + "_others";
-    const error = getByPath(forms.errors, name);
-    const othersError = getByPath(forms.errors, othersName);
-    return (
-      <div className="mb-4">
-        <p className="block text-gray-700 font-medium mb-2">{label}</p>
-        {options.map(option => (
-          <label className="inline-flex mx-2 my-1" key={option}>
-            <input
-              type="radio"
-              className="form-radio mt-1"
-              name={name}
-              ref={ref}
-              value={option}
-            />
-            <span className="ml-1">{option}</span>
-          </label>
-        ))}
-        {others && (
-          <div className="inline-block">
-            <label className="inline-flex mx-2 py-3">
-              <input
-                type="radio"
-                className="form-radio mt-1"
-                name={name}
-                ref={ref}
-                value="อื่น ๆ"
-              />
-              <span className="ml-1">อื่น ๆ</span>
-            </label>
-            {forms.watch(name) === "อื่น ๆ" && (
-              <input
-                className="form-input"
-                name={othersName}
-                ref={ref}
-                placeholder="โปรดระบุ"
-              />
-            )}
-          </div>
-        )}
-        <ErrorMessage error={error} />
-        <ErrorMessage error={othersError} />
-      </div>
-    );
-  }
-);
-
-const Select = React.forwardRef(
-  ({ label, name, options, others, forms }, ref) => {
-    const othersName = typeof others === "string" ? others : name + "_others";
-    const error = getByPath(forms.errors, name);
-    const othersError = getByPath(forms.errors, othersName);
-    return (
-      <div className="mb-4">
-        <label className="block text-gray-700 font-medium mb-2" htmlFor={name}>
-          {label}
-        </label>
-        <select
-          className="form-select block w-full"
-          id={name}
-          name={name}
-          ref={ref}
-        >
-          {options.map(option => (
-            <option key={option} value={option}>
-              {option}
-            </option>
-          ))}
-
-          {others && (
-            <option key="others" value="อื่น ๆ">
-              อื่น ๆ
-            </option>
-          )}
-        </select>
-
-        {forms.watch(name) === "อื่น ๆ" && (
-          <input
-            className="form-input"
-            name={othersName}
-            ref={ref}
-            placeholder="โปรดระบุ"
-          />
-        )}
-        <ErrorMessage error={error} />
-        <ErrorMessage error={othersError} />
-      </div>
-    );
-  }
-);
-
-const Checks = React.forwardRef(
-  ({ label, name, options, others, forms }, ref) => {
-    const othersName = typeof others === "string" ? others : name + "_others";
-    const error = getByPath(forms.errors, name);
-    const othersError = getByPath(forms.errors, othersName);
-    return (
-      <div className="mb-4">
-        <p className="block text-gray-700 font-medium mb-2">
-          {label}{" "}
-          <span className="font-normal text-gray-500 whitespace-no-wrap">
-            (ระบุได้มากกว่า 1 ข้อ)
-          </span>
-        </p>
-        {options.map(option => (
-          <label className="flex mx-2 my-1" key={option}>
-            <input
-              type="checkbox"
-              className="form-checkbox mt-1"
-              name={name}
-              ref={ref}
-              value={option}
-            />
-            <span className="ml-1">{option}</span>
-          </label>
-        ))}
-        {others && (
-          <div className="block">
-            <label className="inline-flex mx-2 py-3">
-              <input
-                type="checkbox"
-                className="form-checkbox mt-1"
-                name={name}
-                ref={ref}
-                value="อื่น ๆ"
-              />
-              <span className="ml-1">อื่น ๆ</span>
-            </label>
-            {forms.watch(name)?.includes("อื่น ๆ") && (
-              <input
-                className="form-input"
-                name={othersName}
-                ref={ref}
-                placeholder="โปรดระบุ"
-              />
-            )}
-          </div>
-        )}
-        <ErrorMessage error={error} />
-        <ErrorMessage error={othersError} />
-      </div>
-    );
-  }
-);
-
 const RegisterPage = ({ location }) => {
   const firestoreUserRef = useUser(state => state.firestoreUserRef);
-  const [loading, setLoading] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
 
   const forms = useForm();
-  const { register, handleSubmit, watch, errors } = forms;
+  const { register, handleSubmit, watch } = forms;
 
   const onSubmit = data => {
-    setLoading(true);
+    setSubmitting(true);
     firestoreUserRef.update({
       name: data.name
     });
+    const registrationData = {
+      gender: data.gender,
+      age: Number(data.age),
+      job: data.job,
+      province: data.province,
+      referrer: data.referrer,
+      expectation: data.expectation
+    };
+    if (data.school) {
+      registrationData.school = data.school;
+    }
+    if (data.university) {
+      registrationData.university = data.university;
+    }
+    if (data.referrer_others) {
+      registrationData.referrer_others = data.referrer_others;
+    }
+    if (data.expectation_others) {
+      registrationData.expectation_others = data.referrer_others;
+    }
     firestoreUserRef
       .collection("userData")
       .doc("registration")
-      .set({
-        gender: data.gender_others || data.gender,
-        age: data.age,
-        job: data.job
-      });
+      .set(registrationData);
   };
-
-  console.log(watch(), errors);
 
   const schoolForm = (
     <>
@@ -301,8 +136,7 @@ const RegisterPage = ({ location }) => {
           "มัธยมศึกษาปีที่ 5",
           "มัธยมศึกษาปีที่ 4",
           "มัธยมศึกษาตอนต้น",
-          "ประถมศึกษาตอนปลาย",
-          "ประถมศึกษาตอนต้น หรือ ต่ำกว่า"
+          "ประถมศึกษา หรือ ต่ำกว่า"
         ]}
         ref={register({ required: true })}
         forms={forms}
@@ -377,7 +211,7 @@ const RegisterPage = ({ location }) => {
     <Layout location={location} requiredAuth>
       <SEO title="กรอกข้อมูลส่วนตัว" />
       <div className="w-full max-w-lg mx-auto md:shadow-md rounded p-3 sm:p-4 md:p-5 mt-8 mb-12">
-        {loading ? (
+        {submitting ? (
           <Spinner />
         ) : (
           <>
@@ -415,8 +249,7 @@ const RegisterPage = ({ location }) => {
                 options={[
                   "นักเรียน",
                   "นิสิต/นักศึกษา",
-                  "ผู้ปกครอง",
-                  "บุคคลทั่วไป"
+                  "ผู้ปกครอง/บุคคลทั่วไป"
                 ]}
                 ref={register({ required: true })}
                 forms={forms}
@@ -424,9 +257,7 @@ const RegisterPage = ({ location }) => {
 
               {watch("job") === "นักเรียน" && schoolForm}
               {watch("job") === "นิสิต/นักศึกษา" && universityForm}
-              {(watch("job") === "ผู้ปกครอง" ||
-                watch("job") === "บุคคลทั่วไป") &&
-                parentForm}
+              {watch("job") === "ผู้ปกครอง/บุคคลทั่วไป" && parentForm}
 
               <Select
                 label="จังหวัดที่พักอาศัย"
@@ -450,12 +281,13 @@ const RegisterPage = ({ location }) => {
                 name="referrer"
                 options={[
                   "Facebook",
-                  "Instagram (IG story)",
-                  "เพื่อนบอก",
-                  "พ่อแม่บอก",
+                  "Instagram",
+                  "เพื่อน",
+                  "พ่อแม่",
+                  "บุตรหลาน",
                   "เว็บไซต์ MDCU Open House",
                   "ฝ่ายแนะแนวของโรงเรียน",
-                  "โปสเตอร์ตามสถาบันสอนพิเศษ"
+                  "โปสเตอร์บริเวณสถาบันสอนพิเศษ"
                 ]}
                 ref={register({ required: true })}
                 forms={forms}
@@ -468,10 +300,10 @@ const RegisterPage = ({ location }) => {
                 options={[
                   "ความรู้เกี่ยวกับโรคและวิธีรักษา",
                   "ความรู้เกี่ยวกับนวัตกรรมในการรักษาผู้ป่วยแบบใหม่",
-                  "ได้พูดคุยกับอาจารย์แพทย์",
-                  "ข้อมูลเกี่ยวกับการเรียนต่อในคณะแพทยศาสตร์ จุฬาฯ",
+                  "การสนทนากับอาจารย์แพทย์",
                   "ข้อมูลเกี่ยวกับการศึกษาต่อในวิชาแพทยศาสตร์",
-                  "มีเกมส์และกิจกรรมลุ้นรางวัลให้ได้เข้าร่วม"
+                  "ข้อมูลเกี่ยวกับการศึกษาต่อในคณะแพทยศาสตร์ จุฬาฯ",
+                  "การเล่นเกมส์และกิจกรรมลุ้นรางวัลภายในงาน"
                 ]}
                 ref={register({ required: true })}
                 forms={forms}
