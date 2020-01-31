@@ -142,7 +142,7 @@ export const Select = React.forwardRef(
 
         {forms.watch(name) === OTHER_TEXT_TH && (
           <input
-            className="form-input"
+            className="form-input w-full mt-2"
             name={othersName}
             ref={ref}
             placeholder="โปรดระบุ"

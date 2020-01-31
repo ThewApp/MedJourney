@@ -135,8 +135,12 @@ const RegisterPage = ({ location }) => {
           "มัธยมศึกษาปีที่ 6",
           "มัธยมศึกษาปีที่ 5",
           "มัธยมศึกษาปีที่ 4",
-          "มัธยมศึกษาตอนต้น",
-          "ประถมศึกษา หรือ ต่ำกว่า"
+          "มัธยมศึกษาปีที่ 3",
+          "มัธยมศึกษาปีที่ 2",
+          "มัธยมศึกษาปีที่ 1",
+          "ประถมศึกษาตอนปลาย",
+          "ประถมศึกษาตอนต้น หรือ ต่ำกว่า",
+          "อื่น ๆ"
         ]}
         ref={register({ required: true })}
         forms={forms}
@@ -170,13 +174,23 @@ const RegisterPage = ({ location }) => {
       <Select
         label="ชั้นปี"
         name="university.year"
-        options={["ปี 1", "ปี 2", "ปี 3", "ปี 4", "ปี 5", "ปี 6"]}
+        options={[
+          "ปี 1",
+          "ปี 2",
+          "ปี 3",
+          "ปี 4",
+          "ปี 5",
+          "ปี 6",
+          "ปริญญาโท",
+          "ปริญญาเอก",
+          "อื่น ๆ"
+        ]}
         ref={register({ required: true })}
         forms={forms}
       />
       <TextInput
         label="คณะ"
-        name="university.major"
+        name="university.faculty"
         ref={register({ required: true })}
         forms={forms}
       />
@@ -268,12 +282,20 @@ const RegisterPage = ({ location }) => {
               />
 
               {watch("job") === "นักเรียน" && (
-                <TextInput
-                  label="คณะที่อยากเข้ามากที่สุด ณ ปัจจุบัน"
-                  name="school.faculty"
-                  ref={register({ required: true })}
-                  forms={forms}
-                />
+                <>
+                  <TextInput
+                    label="คณะที่อยากเข้ามากที่สุด ณ ปัจจุบัน"
+                    name="school.desiredFaculty"
+                    ref={register({ required: true })}
+                    forms={forms}
+                  />
+                  <TextInput
+                    label="มหาวิทยาลัยที่อยากเข้ามากที่สุด ณ ปัจจุบัน"
+                    name="school.desiredUniversity"
+                    ref={register({ required: true })}
+                    forms={forms}
+                  />
+                </>
               )}
 
               <Checks
