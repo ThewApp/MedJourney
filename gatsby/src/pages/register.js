@@ -6,6 +6,7 @@ import SEO from "../components/seo";
 import Spinner from "../components/spinner";
 import { TextInput, RadioGroup, Checks, Select } from "../components/inputs";
 import useUser from "../stores/user";
+import { getAmplitude } from "../firebase/analytics";
 
 const provinces = [
   "กรุงเทพมหานคร",
@@ -106,7 +107,8 @@ const RegisterPage = ({ location }) => {
       job: data.job,
       province: data.province,
       referrer: data.referrer,
-      expectation: data.expectation
+      expectation: data.expectation,
+      registrationTime: new Date()
     };
     if (data.school) {
       registrationData.school = data.school;
@@ -127,6 +129,16 @@ const RegisterPage = ({ location }) => {
       .collection("userData")
       .doc("registration")
       .set(registrationData);
+
+    getAmplitude(amplitude => {
+      const identify = new amplitude.Identify()
+        .set("gender", data.gender)
+        .set("age", Number(data.age))
+        .set("job", data.job)
+        .set("province", data.province);
+      amplitude.getInstance().identify(identify);
+      amplitude.getInstance().logEvent("register");
+    });
   };
 
   const schoolForm = (

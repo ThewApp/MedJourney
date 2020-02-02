@@ -1,5 +1,6 @@
 import create from "zustand";
 import { getFirebase } from "../firebase";
+import { getAmplitude } from "../firebase/analytics";
 
 const [useUser, api] = create(() => ({
   /** @type {firebase.User} */
@@ -13,8 +14,12 @@ getFirebase(firebase =>
   firebase.auth().onAuthStateChanged(user => {
     if (user) {
       api.setState({ authUser: user });
+      getAmplitude(amplitude => {
+        amplitude.getInstance().setUserId(user.uid);
+      });
     } else {
       api.setState({ authUser: null });
+      getAmplitude(amplitude => amplitude.getInstance().setUserId(null));
     }
   })
 );
@@ -29,7 +34,9 @@ function authUserListener(authUser) {
         .doc(`users/${authUser.uid}`)
         .onSnapshot(docSnapshot => {
           if (!docSnapshot.exists) {
-            docSnapshot.ref.set({});
+            docSnapshot.ref.set({
+              createdAt: new Date()
+            });
           } else {
             api.setState({
               firestoreUser: docSnapshot.data(),
