@@ -114,6 +114,9 @@ const RegisterPage = ({ location }) => {
     if (data.university) {
       registrationData.university = data.university;
     }
+    if (data.parent) {
+      registrationData.parent = data.parent;
+    }
     if (data.referrer_others) {
       registrationData.referrer_others = data.referrer_others;
     }
@@ -214,7 +217,7 @@ const RegisterPage = ({ location }) => {
     <>
       <TextInput
         label="อาชีพ/สายงานที่ปฏิบัติอยู่"
-        name="parent.field"
+        name="parent.occupation"
         ref={register({ required: true })}
         forms={forms}
       />
