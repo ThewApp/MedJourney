@@ -41,6 +41,14 @@ class Amplitude {
 }
 
 const amplitude = new Amplitude();
+/**
+ * @callback getAmplitudeCallback
+ * @param {import("amplitude-js")} amplitude
+ *
+ * @callback getAmplitude
+ * @param {getAmplitudeCallback} callback
+ * @type {getAmplitude}
+ */
 export const getAmplitude = amplitude.getAmplitude.bind(amplitude);
 
 export function initAnalytics() {

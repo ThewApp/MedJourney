@@ -36,6 +36,14 @@ class Firebase {
 
 const firebase = new Firebase();
 firebase.init();
+/**
+ * @callback getFirebaseCallback
+ * @param {import("firebase/app")} firebase
+ *
+ * @callback getFirebase
+ * @param {getFirebaseCallback} callback
+ * @type {getFirebase}
+ */
 export const getFirebase = firebase.getFirebase.bind(firebase);
 
 export { default as useAnalytics } from "./useAnalytics";
