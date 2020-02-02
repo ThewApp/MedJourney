@@ -4,5 +4,6 @@
 @import "tailwindcss/components";
 
 @import "./spinner";
+@import "./markdown";
 
 @import "tailwindcss/utilities";

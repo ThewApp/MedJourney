@@ -22,6 +22,7 @@
     "react-dom": "^16.12.0",
     "react-helmet": "^5.2.1",
     "react-hook-form": "^4.7.2",
+    "react-markdown": "^4.3.1",
     "zustand": "^2.2.2"
   },
   "devDependencies": {
