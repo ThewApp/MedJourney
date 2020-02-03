@@ -2,15 +2,15 @@
   @apply relative mx-auto my-8 w-16 h-16;
 }
 
-.double-bounce1,
-.double-bounce2 {
+.spinner .double-bounce1,
+.spinner .double-bounce2 {
   @apply w-full h-full rounded-full bg-primary-500 absolute inset-0 opacity-50;
 
   -webkit-animation: sk-bounce 2s infinite ease-in-out;
   animation: sk-bounce 2s infinite ease-in-out;
 }
 
-.double-bounce2 {
+.spinner .double-bounce2 {
   -webkit-animation-delay: -1s;
   animation-delay: -1s;
 }
