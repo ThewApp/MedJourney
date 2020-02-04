@@ -1,23 +1,31 @@
 import React from "react";
 import { Link, graphql } from "gatsby";
 import ReactMarkdown from "react-markdown";
+import Img from "gatsby-image";
 
 import Layout from "../components/layout";
 import SEO from "../components/seo";
 
-function EventCard({ event, className }) {
+function EventCard({ event, logo, className }) {
   return (
     <div className={"p-4 shadow-md rounded-sm flex flex-col " + className}>
-      <h3 className="text-lg text-primary-800 font-medium mb-3">
-        {event.eventName}
-      </h3>
+      <div className="flex items-center mb-4">
+        <Img
+          className="flex-none mr-4"
+          fixed={logo.childImageSharp.fixed}
+          alt={`${event.eventName} Logo`}
+        />
+        <h3 className="text-lg sm:text-xl md:text-2xl text-primary-800 font-medium mb-2">
+          {event.eventName}
+        </h3>
+      </div>
       <ReactMarkdown className="markdown text-gray-800 mb-3">
         {event.eventShortDescription}
       </ReactMarkdown>
       <div className="mt-auto">
         {event.roundInfo && (
           <div className="text-secondary-700 mb-3">
-            <p>กิจกรรมนี้มีการเปิดเป็นรอบ</p>
+            <p>กิจกรรมนี้มีกิจกรรมย่อย</p>
             <span className="inline-flex items-center">
               <svg
                 className="fill-current mr-2 h-4 inline"
@@ -66,10 +74,14 @@ export default ({ data, location }) => {
         </div>
       </div>
       <div className="flex flex-wrap justify-center">
-        {data.allEventsYaml.nodes.map(node => (
+        {data.allEventsYaml.nodes.map(event => (
           <EventCard
             className="w-full sm:w-5/12 max-w-xl mx-2 my-3 sm:m-6"
-            event={node}
+            key={event.eventId}
+            event={event}
+            logo={data.allFile.nodes.find(
+              file => file.name === event.eventId.toLowerCase()
+            )}
           />
         ))}
       </div>
@@ -81,13 +93,23 @@ export const query = graphql`
   query {
     allEventsYaml {
       nodes {
-        id
+        eventId
         eventName
         eventPath
         eventShortDescription
         roundInfo {
           duration
         }
+      }
+    }
+    allFile(filter: { relativeDirectory: { eq: "events" } }) {
+      nodes {
+        childImageSharp {
+          fixed(quality: 75, width: 100) {
+            ...GatsbyImageSharpFixed
+          }
+        }
+        name
       }
     }
   }
