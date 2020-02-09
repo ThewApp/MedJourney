@@ -16,19 +16,36 @@ const LegacyLoginPage = ({ location }) => {
   const [submitting, setSubmitting] = useState(false);
 
   const onSubmit = data => {
-    setSubmitting(true);
-    const registerLegacy = functions("asia-east2").httpsCallable("legacyLogin");
-    registerLegacy(data).then(
-      result => {
-        auth().signInWithCustomToken(result.data.token);
-      },
-      error => {
-        if ((error.message = "wrong-birthday")) {
-          setSubmitting(false);
-          setError("birthday", "wrong-birthday", "ไม่ถูกต้อง");
+    const thaiIdArray = data.thaiId.split("");
+    const checkSum =
+      (11 -
+        (thaiIdArray
+          .slice(0, 12)
+          .reduce(
+            (sum, digit, index) => sum + (13 - Number(index)) * digit,
+            0
+          ) %
+          11)) %
+      10;
+    if (checkSum === Number(data.thaiId[12])) {
+      setSubmitting(true);
+      const registerLegacy = functions("asia-east2").httpsCallable(
+        "legacyLogin"
+      );
+      registerLegacy(data).then(
+        result => {
+          auth().signInWithCustomToken(result.data.token);
+        },
+        error => {
+          if ((error.message = "wrong-birthday")) {
+            setSubmitting(false);
+            setError("birthday", "wrong-birthday", "ไม่ถูกต้อง");
+          }
         }
-      }
-    );
+      );
+    } else {
+      setError("thaiId", "wrong-thaiId", "เลขประจำตัวประชาชนไม่ถูกต้อง");
+    }
   };
 
   return (
