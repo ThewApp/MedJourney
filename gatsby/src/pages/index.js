@@ -51,7 +51,7 @@ const IndexPage = ({ location }) => {
             to={authUser ? "/register" : "/login"}
             className="text-xl md:text-2xl text-white bg-primary-700 rounded p-3"
           >
-            ลงทะเบียนออนไลน์
+            ลงทะเบียน
           </Link>
         </h2>
         <svg
