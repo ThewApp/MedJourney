@@ -38,6 +38,17 @@ function authUserListener(authUser) {
               createdAt: new Date(),
               shortId: null
             });
+          } else if (!docSnapshot.data().shortId && docSnapshot.data().name) {
+            import(
+              /* webpackChunkName: "firebase-functions" */ "firebase/functions"
+            ).then(() => {
+              firebase
+                .app()
+                .functions("asia-east2")
+                .httpsCallable("generateShortId")({
+                uid: authUser.uid
+              });
+            });
           } else {
             api.setState({
               firestoreUser: docSnapshot.data(),

@@ -75,30 +75,17 @@ exports.createUser = functions
   .region("asia-east2")
   .firestore.document("users/{userId}")
   .onCreate((snap, context) => {
-    console.log(`Creating shortId for ${context.params.userId}`);
-    function shortIdExists(shortId) {
-      return snap.ref.parent
-        .where("shortId", "==", shortId)
-        .get()
-        .then(querySnapshot => {
-          return !querySnapshot.empty;
-        });
-    }
+    const generateShortId = require("./src/generateShortId");
+    return generateShortId(snap);
+  });
 
-    function generateShortId() {
-      const shortId = String(Math.floor(Math.random() * 10 ** 8)).padStart(
-        8,
-        "0"
-      );
-      return shortIdExists(shortId).then(exists => {
-        if (exists) {
-          return generateShortId();
-        } else {
-          console.log(`Generated shortId: ${shortId}`);
-          return shortId;
-        }
-      });
-    }
-
-    return generateShortId().then(shortId => snap.ref.update({ shortId }));
+exports.generateShortId = functions
+  .region("asia-east2")
+  .https.onCall((data, context) => {
+    const generateShortId = require("./src/generateShortId");
+    return admin
+      .firestore()
+      .doc("users/" + data.uid)
+      .get()
+      .then(snap => generateShortId(snap));
   });
