@@ -9,7 +9,6 @@ import { TextInput } from "../components/inputs";
 import { useAuth, useFunctions } from "../firebase";
 
 const LegacyLoginPage = ({ location }) => {
-  const { authUser } = useUser();
   const auth = useAuth();
   const functions = useFunctions();
   const forms = useForm();
@@ -48,11 +47,6 @@ const LegacyLoginPage = ({ location }) => {
       setError("thaiId", "wrong-thaiId", "เลขประจำตัวประชาชนไม่ถูกต้อง");
     }
   };
-
-  useEffect(() => {
-    /* global ___loader */
-    ___loader.enqueue(redirectUrl);
-  }, [redirectUrl]);
 
   return (
     <Layout location={location}>
