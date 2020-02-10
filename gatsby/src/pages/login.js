@@ -6,7 +6,8 @@ import SEO from "../components/seo";
 import Spinner from "../components/spinner";
 import { useAuth } from "../firebase";
 
-const LoginPage = ({ location }) => {
+const LoginPage = () => {
+  const { authUser } = useUser();
   const auth = useAuth();
   const [loading, setLoading] = useState(false);
 
@@ -40,6 +41,11 @@ const LoginPage = ({ location }) => {
       sessionStorage.setItem("signInWithRedirect", "true");
     }
   }
+
+  useEffect(() => {
+    /* global ___loader */
+    ___loader.enqueue(redirectUrl);
+  }, [redirectUrl]);
 
   return (
     <Layout location={location}>
