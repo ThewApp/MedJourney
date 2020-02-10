@@ -75,6 +75,7 @@ exports.createUser = functions
   .region("asia-east2")
   .firestore.document("users/{userId}")
   .onCreate((snap, context) => {
+    console.log(`Creating shortId for ${context.params.userId}`);
     function shortIdExists(shortId) {
       return snap.ref.parent
         .where("shortId", "==", shortId)
@@ -93,6 +94,7 @@ exports.createUser = functions
         if (exists) {
           return generateShortId();
         } else {
+          console.log(`Generated shortId: ${shortId}`);
           return shortId;
         }
       });
