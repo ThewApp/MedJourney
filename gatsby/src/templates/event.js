@@ -6,6 +6,31 @@ import Layout from "../components/layout";
 import SEO from "../components/seo";
 import Img from "gatsby-image";
 
+function RoundList({ rounds, duration }) {
+  return rounds.map(round => {
+    const startTimeString = new Date(round.startTime).toLocaleTimeString(
+      "th-TH",
+      {
+        hour: "2-digit",
+        minute: "2-digit"
+      }
+    );
+    const endTimeString = new Date(
+      (Date.parse(round.startTime) / 1000 + 60 * duration) * 1000
+    ).toLocaleTimeString("th-TH", { hour: "numeric", minute: "numeric" });
+    return (
+      <ul
+        className="block px-4 py-2 bg-gray-100 rounded mb-2 mx-4"
+        key={round.id}
+      >
+        <li className="text-gray-900 leading-tight">
+          {startTimeString} - {endTimeString}
+        </li>
+      </ul>
+    );
+  });
+}
+
 export default ({ location, data }) => {
   const event = data.eventsYaml;
   const logo = data.allFile.nodes.find(
@@ -23,78 +48,53 @@ export default ({ location, data }) => {
   }
   return (
     <Layout location={location}>
-      <div className="flex items-center my-6 md:my-12 mx-5 md:mx-24">
-        <div className="">
-          <SEO
-            title={event.eventName}
-            description={event.eventShortDescription}
-          />
-          <div className="flex items-center mb-4 py-2">
-            <Img
-              className="flex-none mr-4"
-              fixed={logo.childImageSharp.fixed}
-              alt={`${event.eventName} Logo`}
-            />
-            <h3 className="text-4xl text-primary-800 font-medium mb-2">
-              <b>{event.eventName}</b>
-            </h3>
-          </div>
-          <ReactMarkdown className="markdown">
-            {event.eventDescription}
+      <SEO title={event.eventName} description={event.eventShortDescription} />
+      <div className="container px-4 sm:mx-auto my-6 md:my-12">
+        <Img
+          className="mb-4 mx-auto block"
+          fixed={logo.childImageSharp.fixed}
+          alt={`${event.eventName} Logo`}
+          style={{ display: "inherit" }}
+        />
+        <h1 className="text-2xl sm:text-3xl lg:text-4xl text-primary-800 font-medium text-center mb-8">
+          {event.eventName}
+        </h1>
+        <ReactMarkdown className="markdown max-w-screen-md mx-auto">
+          {event.eventDescription}
+        </ReactMarkdown>
+        <section className="max-w-screen-md mx-auto">
+          <h2 className="text-lg font-medium mb-2">สิ่งที่จะได้กลับไป</h2>
+          <ReactMarkdown className="markdown ml-4">
+            {event.eventWill}
           </ReactMarkdown>
-          {event.rounds && (
-            <div className="py-4">
-              <div className="py-2">
-                <b className="text-2xl">{event.roundInfo.name}</b>
-              </div>
-              <div>
-                <span className="text-m">
-                  รอบละ {event.roundInfo.capacity} คน
-                </span>
-              </div>
+        </section>
+        {event.rounds && (
+          <section className="py-4 max-w-screen-md mx-auto">
+            <h2 className="text-lg font-medium mb-2">
+              กิจกรรมย่อย : {event.roundInfo.name}
+            </h2>
+            <p>รอบละ {event.roundInfo.capacity} คน</p>
+            <div className="flex flex-wrap my-2 justify-around">
+              <article className="w-full md:w-1/2">
+                <h3 className="mb-2 font-medium">21 มีนาคม 2563</h3>
+                <RoundList
+                  rounds={roundOn21}
+                  duration={event.roundInfo.duration}
+                />
+              </article>
+              <article className="w-full md:w-1/2">
+                <h3 className="mb-2 font-medium">22 มีนาคม 2563</h3>
+                <RoundList
+                  rounds={roundOn22}
+                  duration={event.roundInfo.duration}
+                />
+              </article>
             </div>
-          )}
-          {event.rounds && roundOn21.length > 0 && (
-            <div className="py-4">
-              <b className="text-l">21 มีนาคม 2563</b>
+            <div className="text-xl md:text-2xl my-8 text-center text-primary-600 font-medium">
+              เปิดให้จอง 26 - 29 กุมภาพันธ์นี้
             </div>
-          )}
-          {event.rounds &&
-            roundOn21.map(round => (
-              <div className="p-2">
-                <div className="block px-4 py-2 bg-gray-100 rounded-lg">
-                  <h4 className="text-xl text-gray-900 leading-tight">
-                    {new Date(round.startTime).toLocaleTimeString("th-TH")} -{" "}
-                    {new Date(
-                      (Date.parse(round.startTime) / 1000 +
-                        60 * event.roundInfo.duration) *
-                        1000
-                    ).toLocaleTimeString("th-TH")}
-                  </h4>
-                </div>
-              </div>
-            ))}
-          {event.rounds && roundOn22.length > 0 && (
-            <div className="py-4">
-              <b className="text-l">22 มีนาคม 2563</b>
-            </div>
-          )}
-          {event.rounds &&
-            roundOn22.map(round => (
-              <div className="p-2">
-                <div className="block px-4 py-2 bg-gray-100 rounded-lg">
-                  <h4 className="text-xl text-gray-900 leading-tight">
-                    {new Date(round.startTime).toLocaleTimeString("th-TH")} -{" "}
-                    {new Date(
-                      (Date.parse(round.startTime) / 1000 +
-                        60 * event.roundInfo.duration) *
-                        1000
-                    ).toLocaleTimeString("th-TH")}
-                  </h4>
-                </div>
-              </div>
-            ))}
-        </div>
+          </section>
+        )}
       </div>
     </Layout>
   );
@@ -107,6 +107,7 @@ export const query = graphql`
       eventName
       eventShortDescription
       eventDescription
+      eventWill
       roundInfo {
         name
         capacity
@@ -114,13 +115,14 @@ export const query = graphql`
         requirements
       }
       rounds {
+        id
         startTime
       }
     }
     allFile(filter: { relativeDirectory: { eq: "events" } }) {
       nodes {
         childImageSharp {
-          fixed(quality: 100, width: 100) {
+          fixed(quality: 75, width: 150) {
             ...GatsbyImageSharpFixed
           }
         }
