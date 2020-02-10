@@ -49,7 +49,7 @@ const IndexPage = ({ location }) => {
         <h2>
           <Link
             to={authUser ? "/register" : "/login"}
-            className="text-xl md:text-2xl text-white bg-primary-700 rounded p-3"
+            className="text-xl md:text-2xl text-white bg-primary-700 rounded px-8 py-3"
           >
             ลงทะเบียน
           </Link>
