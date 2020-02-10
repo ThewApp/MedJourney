@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { graphql } from "gatsby";
 
 import Layout from "../components/layout";
 import SEO from "../components/seo";
@@ -89,12 +90,18 @@ function Stamp({ userShortId, staff, onSuccess }) {
   );
 }
 
-const StaffPage = ({ location }) => {
+function Booking({ userShortId, staff, onSuccess }) {
+  return null;
+}
+
+const StaffPage = ({ location, data }) => {
   const firestore = useFirestore();
   const [staff, setStaff] = useState();
   const [mode, setMode] = useState("QR Stamp");
   const [userShortId, setUserShortId] = useState("");
   const [manualUserShortId, setManualUserShortId] = useState("");
+
+  console.log(data);
 
   useEffect(() => {
     const urlParams = new URLSearchParams(location.search);
@@ -110,7 +117,7 @@ const StaffPage = ({ location }) => {
   }, [firestore, location]);
 
   return (
-    <Layout>
+    <Layout location={location}>
       <SEO title="App" />
       {staff && <h1 className="text-center text-lg">{staff.eventType}</h1>}
       {staff ? (
@@ -148,11 +155,20 @@ const StaffPage = ({ location }) => {
             >
               <option>QR Stamp</option>
               <option>Manual Stamp</option>
-              <option>QR Reservation</option>
-              <option>Manual Reservation</option>
+              <option>QR Booking</option>
+              <option>Manual Booking</option>
             </select>
             {mode.includes("Stamp") && (
               <Stamp
+                userShortId={userShortId}
+                staff={staff}
+                onSuccess={() => {
+                  setManualUserShortId("");
+                }}
+              />
+            )}
+            {mode.includes("Booking") && (
+              <Booking
                 userShortId={userShortId}
                 staff={staff}
                 onSuccess={() => {
@@ -170,3 +186,15 @@ const StaffPage = ({ location }) => {
 };
 
 export default StaffPage;
+
+export const query = graphql`
+  query {
+    allEventsYaml {
+      nodes {
+        id
+        eventName
+        eventPath
+      }
+    }
+  }
+`;

@@ -1,36 +1,21 @@
 import React, { useState, useEffect } from "react";
-import { Link, navigate } from "gatsby";
+import { Link } from "gatsby";
 
 import Layout from "../components/layout";
 import SEO from "../components/seo";
+import Spinner from "../components/spinner";
 import { useAuth } from "../firebase";
-import useUser from "../context/user";
 
-const LoginPage = () => {
-  const { authUser } = useUser();
+const LoginPage = ({ location }) => {
   const auth = useAuth();
   const [loading, setLoading] = useState(false);
-
-  const redirectUrl =
-    typeof window !== "undefined"
-      ? sessionStorage.getItem("loginRedirect") || "/register"
-      : "/register";
-
-  useEffect(() => {
-    if (authUser && authUser.uid) {
-      sessionStorage.removeItem("loginRedirect");
-      navigate(redirectUrl, { replace: true });
-    }
-  }, [authUser, redirectUrl]);
 
   useEffect(() => {
     if (auth) {
       auth()
         .getRedirectResult()
         .then(function(result) {
-          if (result.user) {
-            navigate(redirectUrl, { replace: true });
-          } else {
+          if (!result.user) {
             setLoading(false);
           }
         })
@@ -39,7 +24,7 @@ const LoginPage = () => {
           console.error(error);
         });
     }
-  }, [auth, redirectUrl]);
+  }, [auth]);
 
   useEffect(() => {
     if (sessionStorage.getItem("signInWithRedirect")) {
@@ -56,17 +41,12 @@ const LoginPage = () => {
     }
   }
 
-  useEffect(() => {
-    /* global ___loader */
-    ___loader.enqueue(redirectUrl);
-  }, [redirectUrl]);
-
   return (
-    <Layout>
+    <Layout location={location}>
       <SEO title="ลงทะเบียนด้วย Facebook" />
       <div className="w-full max-w-md mx-auto md:shadow-md rounded p-3 sm:p-6 md:p-8 mt-16 mb-32 text-center">
         {loading ? (
-          "กำลังโหลด..."
+          <Spinner />
         ) : (
           <>
             <button

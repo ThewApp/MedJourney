@@ -3,8 +3,8 @@ import React from "react";
 import Layout from "../components/layout";
 import SEO from "../components/seo";
 
-const NotFoundPage = () => (
-  <Layout>
+const NotFoundPage = ({ location }) => (
+  <Layout location={location}>
     <SEO title="404: Not found" />
     <div className="container mx-auto flex flex-col sm:flex-row items-center justify-center py-16">
       <h1 className="mx-2 text-4xl md:text-6xl sm:-mt-24 md:-mt-32 lg:-mt-48">
