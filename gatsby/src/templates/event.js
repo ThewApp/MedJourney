@@ -8,15 +8,15 @@ import Img from "gatsby-image";
 
 function RoundList({ rounds, duration }) {
   return rounds.map(round => {
-    const startTimeString = new Date(round.startTime).toLocaleTimeString(
-      "th-TH",
-      {
-        hour: "2-digit",
-        minute: "2-digit"
-      }
-    );
+    const startTimeString = new Date(
+      round.startTime.replace(" ", "T")
+    ).toLocaleTimeString("th-TH", {
+      hour: "2-digit",
+      minute: "2-digit"
+    });
     const endTimeString = new Date(
-      (Date.parse(round.startTime) / 1000 + 60 * duration) * 1000
+      (Date.parse(round.startTime.replace(" ", "T")) / 1000 + 60 * duration) *
+        1000
     ).toLocaleTimeString("th-TH", { hour: "numeric", minute: "numeric" });
     return (
       <ul
