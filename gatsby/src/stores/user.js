@@ -35,7 +35,8 @@ function authUserListener(authUser) {
         .onSnapshot(docSnapshot => {
           if (!docSnapshot.exists) {
             docSnapshot.ref.set({
-              createdAt: new Date()
+              createdAt: new Date(),
+              shortId: null
             });
           } else {
             api.setState({
