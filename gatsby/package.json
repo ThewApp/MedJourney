@@ -16,6 +16,7 @@
     "gatsby-transformer-sharp": "^2.3.14",
     "gatsby-transformer-yaml": "^2.2.24",
     "jsqr": "^1.2.0",
+    "moment": "^2.24.0",
     "prop-types": "^15.7.2",
     "qrcode": "^1.4.4",
     "react": "^16.12.0",

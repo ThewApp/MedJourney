@@ -1,6 +1,7 @@
 import React from "react";
 import { graphql } from "gatsby";
 import ReactMarkdown from "react-markdown";
+import moment from "moment";
 
 import Layout from "../components/layout";
 import SEO from "../components/seo";
@@ -8,16 +9,10 @@ import Img from "gatsby-image";
 
 function RoundList({ rounds, duration }) {
   return rounds.map(round => {
-    const startTimeString = new Date(
-      round.startTime.replace(" ", "T")
-    ).toLocaleTimeString("th-TH", {
-      hour: "2-digit",
-      minute: "2-digit"
-    });
-    const endTimeString = new Date(
-      (Date.parse(round.startTime.replace(" ", "T")) / 1000 + 60 * duration) *
-        1000
-    ).toLocaleTimeString("th-TH", { hour: "numeric", minute: "numeric" });
+    const startTimeString = moment(round.startTime).format("HH:mm");
+    const endTimeString = moment(round.startTime)
+      .add(duration, "m")
+      .format("HH:mm");
     return (
       <ul
         className="block px-4 py-2 bg-gray-100 rounded mb-2 mx-4"
