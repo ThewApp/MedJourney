@@ -26,7 +26,7 @@ const AppPage = ({ location }) => {
   return (
     <Layout location={location} requiredAuth>
       <SEO title="App" />
-      {firestoreUser && firestoreUser.shortId ? (
+      {firestoreUser ? (
         <div className="container mx-auto my-4 text-center">
           <svg
             xmlns="http://www.w3.org/2000/svg"

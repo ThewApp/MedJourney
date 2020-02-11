@@ -3,10 +3,12 @@ import Helmet from "react-helmet";
 import { navigate } from "gatsby";
 
 import useUser from "../stores/user";
+import useFunctions from "../firebase/useFunctions";
 
 function User({ requiredAuth, location }) {
   const authUser = useUser(state => state.authUser);
   const firestoreUser = useUser(state => state.firestoreUser);
+  const functions = useFunctions();
 
   const [pendingRedirect, setPendingRedirect] = useState();
 
@@ -45,6 +47,12 @@ function User({ requiredAuth, location }) {
     location.pathname,
     firestoreUser
   ]);
+
+  useEffect(() => {
+    if (functions && requiredAuth && firestoreUser && !firestoreUser.shortId) {
+      functions("asia-east2").httpsCallable("generateShortId")();
+    }
+  }, [functions, requiredAuth, firestoreUser]);
 
   return (
     <Helmet>
