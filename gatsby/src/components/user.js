@@ -49,10 +49,17 @@ function User({ requiredAuth, location }) {
   ]);
 
   useEffect(() => {
-    if (functions && requiredAuth && firestoreUser && !firestoreUser.shortId) {
+    const isRegisterPage = /^\/register\/?$/.test(location.pathname);
+    if (
+      functions &&
+      requiredAuth &&
+      !isRegisterPage &&
+      firestoreUser &&
+      !firestoreUser.shortId
+    ) {
       functions("asia-east2").httpsCallable("generateShortId")();
     }
-  }, [functions, requiredAuth, firestoreUser]);
+  }, [functions, requiredAuth, location.pathname, firestoreUser]);
 
   return (
     <Helmet>
