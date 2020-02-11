@@ -71,21 +71,52 @@ exports.legacyLogin = functions
     );
   });
 
-exports.createUser = functions
-  .region("asia-east2")
-  .firestore.document("users/{userId}")
-  .onCreate((snap, context) => {
-    const generateShortId = require("./src/generateShortId");
-    return generateShortId(snap);
-  });
-
 exports.generateShortId = functions
   .region("asia-east2")
   .https.onCall((data, context) => {
-    const generateShortId = require("./src/generateShortId");
+    if (!context.auth || !context.auth.uid) {
+      throw new functions.https.HttpsError("unauthenticated");
+    }
+    const uid = context.auth.uid;
+
+    function generateShortId(documentSnapshot) {
+      function shortIdExists(shortId) {
+        return documentSnapshot.ref.parent
+          .where("shortId", "==", shortId)
+          .get()
+          .then(querySnapshot => {
+            return !querySnapshot.empty;
+          });
+      }
+
+      const shortId = String(Math.floor(Math.random() * 10 ** 8)).padStart(
+        8,
+        "0"
+      );
+
+      return shortIdExists(shortId)
+        .then(exists => {
+          if (exists) {
+            console.log(`Existed shortId: ${shortId}`);
+            return generateShortId(documentSnapshot);
+          } else {
+            console.log(`Generated shortId: ${shortId}`);
+            return documentSnapshot.ref.update({ shortId });
+          }
+        })
+        .then(result => console.log(result));
+    }
+
     return admin
       .firestore()
-      .doc("users/" + data.uid)
+      .doc("users/" + uid)
       .get()
-      .then(snap => generateShortId(snap));
+      .then(documentSnapshot => {
+        if (documentSnapshot.exists) {
+          console.log(`Creating shortId for ${uid}`);
+          return generateShortId(documentSnapshot);
+        } else {
+          throw new functions.https.HttpsError("not-found");
+        }
+      });
   });
