@@ -120,3 +120,74 @@ exports.generateShortId = functions
         }
       });
   });
+
+exports.bookRoundId = functions
+  .region("asia-east2")
+  .https.onCall((data, context) => {
+    if (!context.auth || !context.auth.uid) {
+      throw new functions.https.HttpsError("unauthenticated");
+    }
+
+    if (
+      !data.eventId ||
+      !data.roundId ||
+      typeof data.roundId !== "number" ||
+      data.roundId <= 100 ||
+      data.roundId >= 300
+    ) {
+      throw new functions.https.HttpsError("invalid-argument");
+    }
+
+    const yaml = require("js-yaml");
+    const fs = require("fs");
+    const eventsData = yaml.safeLoad(
+      fs.readFileSync("./data/events.yaml", "utf8")
+    );
+    let bookingCapacity;
+    for (eventData of eventsData) {
+      if (eventData.eventId === data.eventId) {
+        bookingCapacity = eventData.roundInfo.booking;
+        break;
+      }
+    }
+
+    const userBookingsRef = admin
+      .firestore()
+      .doc(`bookings/${context.auth.uid}`);
+
+    const eventInfoRef = admin.firestore().doc(`eventsInfo/${data.eventId}`);
+
+    return admin.firestore().runTransaction(transaction => {
+      return transaction.get(eventInfoRef).then(eventInfo => {
+        // Checking conditions
+        // Round is available
+        if (eventInfo.exists) {
+          const eventInfoData = eventInfo.data();
+          if (
+            eventInfoData.bookings &&
+            eventInfoData.bookings[data.roundId] &&
+            eventInfoData.bookings[data.roundId] >= bookingCapacity
+          ) {
+            return false;
+          }
+        }
+
+        // Update eventInfo
+        const eventInfoUpdate = {
+          bookings: {}
+        };
+        eventInfoUpdate.bookings[
+          data.roundId
+        ] = admin.firestore.FieldValue.increment(1);
+        transaction.set(eventInfoRef, eventInfoUpdate, {
+          merge: true
+        });
+
+        // Update booking
+        const bookingData = {};
+        bookingData[data.eventId] = data.roundId;
+        transaction.set(userBookingsRef, bookingData, { merge: true });
+        return true;
+      });
+    });
+  });

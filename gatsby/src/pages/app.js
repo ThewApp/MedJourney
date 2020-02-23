@@ -141,9 +141,12 @@ const AppPage = ({ location }) => {
             {firestoreUser.shortId}
           </p> */}
           <h1 className="text-2xl my-4">ลงทะเบียนสำเร็จแล้ว</h1>
-          <p className="my-4">สามารถจองรอบกิจกรรม 26 - 29 กุมภาพันธ์นี้</p>
-          <Link to="/events" className="mb-2 block underline">
-            ดูกิจกรรม
+          <p className="my-4">สามารถจองรอบกิจกรรมได้ 26 - 29 กุมภาพันธ์นี้</p>
+          <Link to="/events#all" className="mb-2 block underline">
+            ดูกิจกรรมทั้งหมด
+          </Link>
+          <Link to="/events#bookings" className="mb-2 block underline">
+            ดูกิจกรรมที่เปิดให้จองรอบ
           </Link>
           <Link to="/" className="mb-2 block underline">
             กลับหน้าหลัก

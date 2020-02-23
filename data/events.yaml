@@ -10,7 +10,7 @@
 #     booking: 60
 #     walkIn: 40
 #     capacity: 120
-#     requirements: ต้องมาถึงบริเวณกิจกรรม ก่อนรอบเวลาของตนเอง 10 นาที
+#     preDuration: 10
 #   rounds:
 #     - id: 101
 #       startTime: 2020-03-21 08:00
@@ -40,7 +40,7 @@
     booking: 15
     walkIn: 0
     capacity: 15
-    requirements: ต้องมาถึงบริเวณกิจกรรม ก่อนรอบเวลาของตนเอง 10 นาที
+    preDuration: 10
   rounds:
     - id: 101
       startTime: 2020-03-21 08:00
@@ -105,7 +105,7 @@
     booking: 15
     walkIn: 6
     capacity: 21
-    requirements: ต้องมาถึงบริเวณกิจกรรม ก่อนรอบเวลาของตนเอง 10 นาที
+    preDuration: 10
   rounds:
     - id: 101
       startTime: 2020-03-21 08:00
@@ -184,7 +184,7 @@
     booking: 40
     walkIn: 20
     capacity: 60
-    requirements: ต้องมาถึงบริเวณกิจกรรม ก่อนรอบเวลาของตนเอง 10 นาที
+    preDuration: 10
   rounds:
     - id: 101
       startTime: 2020-03-21 08:30
@@ -247,7 +247,7 @@
     booking: 10
     walkIn: 10
     capacity: 20
-    requirements: ต้องมาถึงบริเวณกิจกรรม ก่อนรอบเวลาของตนเอง 10 นาที
+    preDuration: 10
   rounds:
     - id: 101
       startTime: 2020-03-21 08:00
@@ -333,7 +333,7 @@
     booking: 20
     walkIn: 0
     capacity: 20
-    requirements: ต้องมาถึงบริเวณกิจกรรม ก่อนรอบเวลาของตนเอง 10 นาที
+    preDuration: 10
   rounds:
     - id: 101
       startTime: 2020-03-21 08:00
@@ -388,7 +388,7 @@
     booking: 20
     walkIn: 0
     capacity: 20
-    requirements: ต้องมาถึงบริเวณกิจกรรม ก่อนรอบเวลาของตนเอง 10 นาที
+    preDuration: 10
   rounds:
     - id: 101
       startTime: 2020-03-21 08:40
@@ -503,7 +503,7 @@
     booking: 75
     walkIn: 25
     capacity: 100
-    requirements: ต้องมาถึงบริเวณกิจกรรม ก่อนรอบเวลาของตนเอง 15 นาที
+    preDuration: 15
   rounds:
     - id: 101
       startTime: 2020-03-21 08:30
@@ -602,7 +602,7 @@
     booking: 6
     walkIn: 2
     capacity: 8
-    requirements: ต้องมาถึงบริเวณกิจกรรม ก่อนรอบเวลาของตนเอง 10 นาที
+    preDuration: 10
   rounds:
     - id: 101
       startTime: 2020-03-21 10:00
@@ -774,7 +774,7 @@
     booking: 80
     walkIn: 40
     capacity: 120
-    requirements: ต้องมาถึงบริเวณกิจกรรม ตรงเวลาเริ่มรอบของตนเอง
+    preDuration: 0
   rounds:
     - id: 101
       startTime: 2020-03-21 08:00

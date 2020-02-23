@@ -5,8 +5,10 @@ import Img from "gatsby-image";
 
 import Layout from "../components/layout";
 import SEO from "../components/seo";
+import useUser from "../stores/user";
 
 function EventCard({ event, logo, className }) {
+  const bookedRoundId = useUser(state => state.userBookings)?.[event.eventId];
   return (
     <div className={"p-4 shadow-md rounded-sm flex flex-col " + className}>
       <div className="flex items-center mb-4">
@@ -39,26 +41,39 @@ function EventCard({ event, logo, className }) {
             </span>
           </div>
         )}
-        <Link
-          to={`/events/${event.eventPath}`}
-          key={event.id}
-          className="text-primary-600 flex items-center justify-end"
-        >
-          รายละเอียด
-          <svg
-            className="fill-current ml-2 h-3 inline"
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 268.8 268.8"
+        <div className="flex items-center justify-end">
+          {event.roundInfo && (
+            <Link
+              to={`/events/${event.eventPath}/#booking`}
+              className={
+                "flex-auto text-center" +
+                (bookedRoundId ? " text-secondary-600" : " text-primary-600")
+              }
+            >
+              {bookedRoundId ? "จองกิจกรรมย่อยนี้แล้ว" : "จองกิจกรรมย่อยนี้"}
+            </Link>
+          )}
+          <Link
+            to={`/events/${event.eventPath}`}
+            className="text-primary-600 flex-auto flex-shrink-0 text-right"
           >
-            <path d="M265 126l-80-80a13 13 0 00-18 17l59 59H13a13 13 0 000 25h213l-59 59a12 12 0 1018 17l80-80c5-5 5-13 0-17z" />
-          </svg>
-        </Link>
+            รายละเอียด
+            <svg
+              className="fill-current ml-2 h-3 inline"
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 268.8 268.8"
+            >
+              <path d="M265 126l-80-80a13 13 0 00-18 17l59 59H13a13 13 0 000 25h213l-59 59a12 12 0 1018 17l80-80c5-5 5-13 0-17z" />
+            </svg>
+          </Link>
+        </div>
       </div>
     </div>
   );
 }
 
 export default ({ data, location }) => {
+  const booking = location.hash === "#bookings";
   return (
     <Layout location={location}>
       <SEO
@@ -73,17 +88,43 @@ export default ({ data, location }) => {
           </p>
         </div>
       </div>
+      <div className="flex justify-center sticky top-0 bg-white z-10 shadow text-center">
+        <a
+          href="#all"
+          className={
+            "p-2 md:p-4 transition-all duration-300 ease-out " +
+            (booking
+              ? "text-gray-700"
+              : "bg-primary-600 text-white px-8 md:px-12")
+          }
+        >
+          กิจกรรมทั้งหมด
+        </a>
+        <a
+          href="#bookings"
+          className={
+            "p-2 md:p-4 transition-all duration-300 ease-out " +
+            (booking
+              ? "bg-primary-600 text-white px-8 md:px-12"
+              : "text-gray-700")
+          }
+        >
+          กิจกรรมที่สามารถจองกิจกรรมย่อยได้
+        </a>
+      </div>
       <div className="flex flex-wrap justify-center">
-        {data.allEventsYaml.nodes.map(event => (
-          <EventCard
-            className="w-full sm:w-5/12 max-w-xl mx-2 my-3 sm:m-6"
-            key={event.eventId}
-            event={event}
-            logo={data.allFile.nodes.find(
-              file => file.name === event.eventId.toLowerCase()
-            )}
-          />
-        ))}
+        {data.allEventsYaml.nodes
+          .filter(event => (booking ? event.roundInfo : true))
+          .map(event => (
+            <EventCard
+              className="w-full sm:w-5/12 max-w-xl mx-2 my-3 sm:m-6"
+              key={event.eventId}
+              event={event}
+              logo={data.allFile.nodes.find(
+                file => file.name === event.eventId.toLowerCase()
+              )}
+            />
+          ))}
       </div>
     </Layout>
   );
