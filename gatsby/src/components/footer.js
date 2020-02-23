@@ -1,10 +1,11 @@
 import PropTypes from "prop-types";
 import React from "react";
+import { Link } from "gatsby";
 
 const Footer = ({ facebook }) => (
   <footer className="bg-gray-800">
     <div className="container flex mx-auto flex-col text-white py-8 px-3 sm:p-12">
-      <div className="flex">
+      <div className="flex mb-4">
         <p className="mr-2">ติดตามรายละเอียดเพิ่มเติม ทาง</p>
         <a
           className="md:mx-4 inline-flex"
@@ -23,6 +24,9 @@ const Footer = ({ facebook }) => (
             MDCU Open House 2020 : MedJourney
           </span>
         </a>
+      </div>
+      <div>
+        <Link to="/privacy">นโยบายการคุ้มครองข้อมูลส่วนบุคคล</Link>
       </div>
 
       <div className="text-gray-300 text-sm sm:ml-auto mt-8">
