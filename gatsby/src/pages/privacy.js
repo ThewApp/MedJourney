@@ -7,7 +7,7 @@ import SEO from "../components/seo";
 const IndexPage = ({ location }) => {
   return (
     <Layout location={location}>
-      <SEO title="นโยบายส่วนบุคคล" />
+      <SEO title="นโยบายการคุ้มครองข้อมูลส่วนบุคคล" />
       <ReactMarkdown className="container mx-auto my-6 px-2 md:px-8 markdown">
         {`
 # นโยบายการคุ้มครองข้อมูลส่วนบุคคล เว็บไซต์นิทรรศการ "MDCU Open House"
