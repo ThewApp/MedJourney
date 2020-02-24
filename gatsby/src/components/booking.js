@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { graphql, Link, useStaticQuery } from "gatsby";
 import moment from "moment";
 
-import { useFunctions, useFirestore } from "../firebase";
+import { useFunctions, useFirestore, useAnalytics } from "../firebase";
 import useUser from "../stores/user";
 
 function parseRoundTime(startTime, duration) {
@@ -120,6 +120,7 @@ export default function Booking({ event }) {
 
   const functions = useFunctions();
   const firestore = useFirestore();
+  const { amplitude } = useAnalytics();
   const userReady = useUser(state => state.firestoreUser)?.name;
   const userBookings = useUser(state => state.userBookings) || {};
   const userBookedTime = Object.keys(userBookings).map(eventId => {
@@ -183,6 +184,9 @@ export default function Booking({ event }) {
             result => {
               if (result.data) {
                 window.alert("จองสำเร็จแล้ว");
+                amplitude
+                  .getInstance()
+                  .logEvent("book_event", { eventId: event.eventId, roundId });
               } else {
                 window.alert("จองไม่สำเร็จ รอบนี้เต็มแล้ว");
               }
