@@ -27,11 +27,13 @@ exports.createPages = async ({ graphql, actions }) => {
   });
 };
 
-exports.onCreateWebpackConfig = ({ actions }) => {
-  actions.setWebpackConfig({
-    externals: {
-      react: "React",
-      "react-dom": "ReactDOM"
-    }
-  });
+exports.onCreateWebpackConfig = ({ stage, actions }) => {
+  if (stage === "build-javascript") {
+    actions.setWebpackConfig({
+      externals: {
+        react: "React",
+        "react-dom": "ReactDOM"
+      }
+    });
+  }
 };
