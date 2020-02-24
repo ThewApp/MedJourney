@@ -49,8 +49,18 @@ function RoundList({
               booked.momentPreTime,
               booked.momentEndTime
             ) ||
-            booked.momentPreTime.isBetween(momentPreTime, momentEndTime) ||
-            booked.momentEndTime.isBetween(momentPreTime, momentEndTime)
+            booked.momentPreTime.isBetween(
+              momentPreTime,
+              momentEndTime,
+              null,
+              "[]"
+            ) ||
+            booked.momentEndTime.isBetween(
+              momentPreTime,
+              momentEndTime,
+              null,
+              "[]"
+            )
           ) {
             hasBookedOther = true;
           }
