@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useLayoutEffect } from "react";
 import { Link, graphql } from "gatsby";
 import ReactMarkdown from "react-markdown";
 import Img from "gatsby-image";
@@ -73,7 +73,11 @@ function EventCard({ event, logo, className }) {
 }
 
 export default ({ data, location }) => {
-  const booking = location.hash === "#bookings";
+  const bookings = location.hash === "#bookings";
+  const [onClient, setOnClient] = useState(false);
+  useLayoutEffect(() => {
+    setOnClient(true);
+  }, []);
   return (
     <Layout location={location}>
       <SEO
@@ -93,9 +97,11 @@ export default ({ data, location }) => {
           href="#all"
           className={
             "p-2 md:p-4 transition-all duration-300 ease-out " +
-            (booking
-              ? "text-gray-700"
-              : "bg-primary-600 text-white px-8 md:px-12")
+            (onClient
+              ? bookings
+                ? "text-gray-700"
+                : "bg-primary-600 text-white px-8 md:px-12"
+              : "")
           }
         >
           กิจกรรมทั้งหมด
@@ -104,9 +110,11 @@ export default ({ data, location }) => {
           href="#bookings"
           className={
             "p-2 md:p-4 transition-all duration-300 ease-out " +
-            (booking
-              ? "bg-primary-600 text-white px-8 md:px-12"
-              : "text-gray-700")
+            (onClient
+              ? bookings
+                ? "bg-primary-600 text-white px-8 md:px-12"
+                : "text-gray-700"
+              : "")
           }
         >
           กิจกรรมที่สามารถจองกิจกรรมย่อยได้
@@ -114,7 +122,7 @@ export default ({ data, location }) => {
       </div>
       <div className="flex flex-wrap justify-center">
         {data.allEventsYaml.nodes
-          .filter(event => (booking ? event.roundInfo : true))
+          .filter(event => (onClient && bookings ? event.roundInfo : true))
           .map(event => (
             <EventCard
               className="w-full sm:w-5/12 max-w-xl mx-2 my-3 sm:m-6"
