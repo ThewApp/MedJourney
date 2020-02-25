@@ -1,3 +1,5 @@
+import unpkgLoader from "../unpkgLoader";
+
 class Firebase {
   constructor() {
     this.q = [];
@@ -6,16 +8,21 @@ class Firebase {
   init() {
     if (typeof window !== "undefined") {
       const firebaseConfig = JSON.parse(process.env.GATSBY_API_FIREBASE);
-      const app = import(
-        /* webpackChunkName: "firebase-app", webpackPreload: true */ "firebase/app"
-      );
+      const app = unpkgLoader({
+        name: "firebase",
+        url: "https://unpkg.com/firebase@7.9.1/firebase-app.js"
+      });
       app.then(async app => {
         app.initializeApp(firebaseConfig);
         await Promise.all([
-          import(/* webpackChunkName: "firebase-auth" */ "firebase/auth"),
-          import(
-            /* webpackChunkName: "firebase-firestore" */ "@firebase/firestore"
-          )
+          unpkgLoader({
+            name: "firebase-auth",
+            url: "https://unpkg.com/firebase@7.9.1/firebase-auth.js"
+          }),
+          unpkgLoader({
+            name: "firebase-firestore",
+            url: "https://unpkg.com/firebase@7.9.1/firebase-firestore.js"
+          })
         ]);
         this.app = app;
         this.q.forEach(callback => callback(this.app));

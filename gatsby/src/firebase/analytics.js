@@ -1,3 +1,4 @@
+import unpkgLoader from "../unpkgLoader";
 import { getFirebase } from ".";
 
 class Amplitude {
@@ -7,13 +8,14 @@ class Amplitude {
 
   init() {
     if (typeof window !== "undefined") {
-      import(/* webpackChunkName: "amplitude-js" */ "amplitude-js").then(
-        amplitude => {
-          amplitude.getInstance().init(process.env.GATSBY_API_AMPLITUDE);
-          this.amplitude = amplitude;
-          this.q.forEach(callback => callback(this.amplitude));
-        }
-      );
+      unpkgLoader({
+        name: "amplitude",
+        url: "https://unpkg.com/amplitude-js@5.9.0/amplitude.js"
+      }).then(amplitude => {
+        amplitude.getInstance().init(process.env.GATSBY_API_AMPLITUDE);
+        this.amplitude = amplitude;
+        this.q.forEach(callback => callback(this.amplitude));
+      });
     }
   }
 
@@ -53,14 +55,16 @@ export const getAmplitude = amplitude.getAmplitude.bind(amplitude);
 
 export function initAnalytics() {
   getFirebase(firebase => {
-    import(
-      /* webpackChunkName: "firebase-analytics" */ "firebase/analytics"
-    ).then(() => {
+    unpkgLoader({
+      name: "firebase-analytics",
+      url: "https://unpkg.com/firebase@7.9.1/firebase-analytics.js"
+    }).then(() => {
       firebase.analytics();
     });
-    import(
-      /* webpackChunkName: "firebase-analytics" */ "firebase/performance"
-    ).then(() => {
+    unpkgLoader({
+      name: "firebase-performance",
+      url: "https://unpkg.com/firebase@7.9.1/firebase-performance.js"
+    }).then(() => {
       firebase.performance();
     });
   });

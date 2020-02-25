@@ -3,10 +3,10 @@
   "private": true,
   "dependencies": {
     "amplitude-js": "^5.9.0",
-    "firebase": "^7.9.0",
-    "gatsby": "^2.19.19",
+    "firebase": "^7.9.1",
+    "gatsby": "^2.19.21",
     "gatsby-image": "^2.2.41",
-    "gatsby-plugin-manifest": "^2.2.41",
+    "gatsby-plugin-manifest": "^2.2.42",
     "gatsby-plugin-offline": "^3.0.35",
     "gatsby-plugin-postcss": "^2.1.20",
     "gatsby-plugin-react-helmet": "^3.1.22",
@@ -22,7 +22,7 @@
     "react": "^16.12.0",
     "react-dom": "^16.12.0",
     "react-helmet": "^5.2.1",
-    "react-hook-form": "^4.9.7",
+    "react-hook-form": "^4.9.8",
     "react-markdown": "^4.3.1",
     "zustand": "^2.2.3"
   },
