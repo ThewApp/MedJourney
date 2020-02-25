@@ -11,13 +11,11 @@ class Amplitude {
       unpkgLoader({
         name: "amplitude",
         url: "https://unpkg.com/amplitude-js@5.9.0/amplitude.js"
-      }).then(
-        amplitude => {
-          amplitude.getInstance().init(process.env.GATSBY_API_AMPLITUDE);
-          this.amplitude = amplitude;
-          this.q.forEach(callback => callback(this.amplitude));
-        }
-      );
+      }).then(amplitude => {
+        amplitude.getInstance().init(process.env.GATSBY_API_AMPLITUDE);
+        this.amplitude = amplitude;
+        this.q.forEach(callback => callback(this.amplitude));
+      });
     }
   }
 
