@@ -3,7 +3,7 @@
   "private": true,
   "dependencies": {
     "amplitude-js": "^5.9.0",
-    "firebase": "^7.9.0",
+    "firebase": "^7.9.1",
     "gatsby": "^2.19.19",
     "gatsby-image": "^2.2.41",
     "gatsby-plugin-manifest": "^2.2.41",
