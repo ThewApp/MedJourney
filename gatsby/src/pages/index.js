@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "gatsby";
 
+import config from "../config";
 import Layout from "../components/layout";
 import SEO from "../components/seo";
 import Cover from "../components/cover";
@@ -45,15 +46,62 @@ const IndexPage = ({ location }) => {
           </div>
         </div>
       </div>
-      <div className="container mx-auto text-center py-24 md:py-40 px-4 relative">
-        <h2>
-          <Link
-            to={authUser ? "/register" : "/login"}
-            className="text-xl md:text-2xl text-white bg-primary-700 rounded px-8 py-3"
-          >
-            ลงทะเบียน
-          </Link>
-        </h2>
+      <div className="container mx-auto flex flex-col sm:flex-row items-center justify-center text-center mt-6 pb-16 md:pb-32 px-4 relative">
+        <div className="max-w-sm mx-4 my-8 md:w-2/3">
+          <h1 className="text-2xl md:text-3xl font-medium text-primary-700 mb-4">
+            เปิดลงทะเบียน
+          </h1>
+          <h2 className="text-xl md:text-2xl font-medium text-primary-700 mb-12">
+            วันนี้ - 22 มีนาคม 2563
+          </h2>
+          {authUser ? (
+            <Link
+              to="/app"
+              className="text-xl md:text-2xl text-white bg-primary-700 rounded px-8 py-3"
+            >
+              เข้าสู่ระบบ
+            </Link>
+          ) : (
+            <Link
+              to="/login"
+              className="text-xl md:text-2xl text-white bg-primary-700 rounded px-8 py-3"
+            >
+              ลงทะเบียน
+            </Link>
+          )}
+        </div>
+        <div className="max-w-sm mx-4 my-8 md:w-2/3">
+          <h1 className="text-2xl md:text-3xl font-medium text-primary-700 mb-4">
+            {config.bookingClosed ? "กิจกรรมภายในงาน" : "เปิดจองกิจกรรม"}
+          </h1>
+          {config.bookingClosed ? (
+            <p className="text-primary-700 mb-12 leading-loose">
+              การจองกิจกรรมล่วงหน้าสิ้นสุดลงแล้ว
+              <br />
+              ทุกท่านยังคงสามารถเข้าร่วมกิจกรรมอื่น ๆ ได้โดยไม่ต้องจองล่วงหน้า
+            </p>
+          ) : (
+            <h2 className="text-xl md:text-2xl font-medium text-primary-700 mb-12">
+              {config.bookingOpened ? "วันนี้" : "วันที่ 26"} - 29 กุมภาพันธ์
+              2563
+            </h2>
+          )}
+          {config.bookingOpened && !config.bookingClosed ? (
+            <Link
+              to={authUser ? "/events#booking" : "/login"}
+              className="text-xl md:text-2xl text-white bg-primary-700 rounded px-8 py-3"
+            >
+              จองกิจกรรม
+            </Link>
+          ) : (
+            <Link
+              to={"/events"}
+              className="text-xl md:text-2xl text-white bg-primary-700 rounded px-8 py-3"
+            >
+              ดูกิจกรรม
+            </Link>
+          )}
+        </div>
         <svg
           className="w-16 m-4 md:m-6 md:w-32 lg:w-40 absolute right-0 bottom-0 fill-current text-gray-300"
           xmlns="http://www.w3.org/2000/svg"

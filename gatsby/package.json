@@ -27,6 +27,7 @@
     "zustand": "^2.2.3"
   },
   "devDependencies": {
+    "@fullhuman/postcss-purgecss": "^2.0.6",
     "@tailwindcss/custom-forms": "^0.2.1",
     "autoprefixer": "^9.7.4",
     "postcss-import": "^12.0.1",

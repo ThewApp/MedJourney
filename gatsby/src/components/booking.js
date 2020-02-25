@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { graphql, Link, useStaticQuery } from "gatsby";
 import moment from "moment";
 
+import config from "../config";
 import { useFunctions, useFirestore, useAnalytics } from "../firebase";
 import useUser from "../stores/user";
 
@@ -43,23 +44,27 @@ function RoundList({
           } else if (
             momentPreTime.isBetween(
               booked.momentPreTime,
-              booked.momentEndTime
+              booked.momentEndTime,
+              null,
+              "[)"
             ) ||
             momentEndTime.isBetween(
               booked.momentPreTime,
-              booked.momentEndTime
+              booked.momentEndTime,
+              null,
+              "(]"
             ) ||
             booked.momentPreTime.isBetween(
               momentPreTime,
               momentEndTime,
               null,
-              "[]"
+              "[)"
             ) ||
             booked.momentEndTime.isBetween(
               momentPreTime,
               momentEndTime,
               null,
-              "[]"
+              "(]"
             )
           ) {
             hasBookedOther = true;
@@ -70,23 +75,30 @@ function RoundList({
           ? bookingCapacity - bookingsInfo[round.id]
           : bookingCapacity;
         let availableText;
-        if (available > 10) {
-          availableText = "(เหลืออีก > 10)";
-        } else if (available > 5) {
-          availableText = "(เหลืออีก 5 - 10)";
-        } else if (available > 2) {
-          availableText = "(เหลืออีก 3 - 5)";
-        } else if (available > 0) {
-          availableText = "(ใกล้เต็ม)";
-        } else {
-          availableText = "(เต็ม)";
+        if (config.bookingOpened && !config.bookingClosed) {
+          if (available > 10) {
+            availableText = "(เหลืออีก > 10)";
+          } else if (available > 5) {
+            availableText = "(เหลืออีก 5 - 10)";
+          } else if (available > 2) {
+            availableText = "(เหลืออีก 3 - 5)";
+          } else if (available > 0) {
+            availableText = "(ใกล้เต็ม)";
+          } else {
+            availableText = "(เต็ม)";
+          }
         }
+        const bookedThisRound = bookedRoundId === round.id;
         return (
-          <li className="mb-2 mx-4" key={round.id}>
+          <li
+            className="mb-2 mx-4"
+            key={round.id}
+            id={bookedThisRound ? "booked" : undefined}
+          >
             <button
               className={
                 "px-4 py-2 w-full rounded leading-tight text-left" +
-                (bookedRoundId === round.id
+                (bookedThisRound
                   ? " bg-secondary-700 text-white"
                   : hasBookedOther || available <= 0
                   ? " cursor-not-allowed bg-gray-100 text-gray-500"
@@ -96,8 +108,8 @@ function RoundList({
               onClick={() => bookRoundId(round.id, timeString)}
             >
               {timeString}{" "}
-              {hasBookedOther ? (
-                <span className="text-sm">(จองกิจกรรมอื่นแล้ว)</span>
+              {!bookedThisRound && hasBookedOther ? (
+                <span className="text-sm">(มีกิจกรรมที่จองแล้ว)</span>
               ) : (
                 bookingsInfo && availableText
               )}
@@ -181,7 +193,7 @@ export default function Booking({ event }) {
   }, [firestore, event.eventId]);
 
   function bookRoundId(roundId, timeString) {
-    if (userReady) {
+    if (userReady && config.bookingOpened && !config.bookingClosed) {
       const date = roundId < 200 ? "21" : "22";
       const confirmMessage = `ยืนยันการจองกิจกรรม ${event.roundInfo.name} (${event.eventName})
 วันที่ ${date} มีนาคม รอบ ${timeString} น.
@@ -249,19 +261,33 @@ export default function Booking({ event }) {
           />
         </article>
       </div>
-      {userReady ? (
+      {!config.bookingOpened && (
         <div className="text-xl md:text-2xl my-8 text-center text-primary-600 font-medium">
-          {bookedRoundId
-            ? "ท่านได้จองกิจกรรมนี้แล้ว และ ไม่สามารถแก้ไขการจองได้"
-            : "กรุณาเลือกรอบที่ต้องการจอง"}
+          เปิดจองกิจกรรม วันที่ 26 - 29 กุมภาพันธ์ 2563
         </div>
-      ) : (
-        <Link
-          to="/login"
-          className="block text-xl md:text-2xl my-8 mx-auto p-4 rounded text-center bg-primary-700 text-white font-medium"
-        >
-          ลงทะเบียนเพื่อจองกิจกรรม
-        </Link>
+      )}
+      {config.bookingOpened &&
+        !config.bookingClosed &&
+        (userReady ? (
+          <div className="text-xl md:text-2xl my-8 text-center text-primary-600 font-medium">
+            {bookedRoundId
+              ? "ท่านได้จองกิจกรรมนี้แล้ว และ ไม่สามารถแก้ไขการจองได้"
+              : "กรุณาเลือกรอบที่ต้องการจอง"}
+          </div>
+        ) : (
+          <Link
+            to="/login"
+            className="block text-xl md:text-2xl my-8 mx-auto p-4 rounded text-center bg-primary-700 text-white font-medium"
+          >
+            ลงทะเบียนเพื่อจองกิจกรรม
+          </Link>
+        ))}
+      {config.bookingClosed && (
+        <div className="text-xl md:text-2xl my-8 text-center text-primary-600 font-medium">
+          การจองกิจกรรมย่อยล่วงหน้าสิ้นสุดลงแล้ว
+          <br />
+          ทุกท่านยังคงสามารถเข้าร่วมกิจกรรมนี้ ได้โดยไม่ต้องจองล่วงหน้า
+        </div>
       )}
     </section>
   );
