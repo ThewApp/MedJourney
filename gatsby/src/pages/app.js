@@ -25,7 +25,7 @@ function UserBookingsList() {
   `).allEventsYaml.nodes;
 
   const userBookings = useUser(state => state.userBookings);
-  if (!userBookings) {
+  if (!userBookings || Object.keys(userBookings).length < 1) {
     return null;
   }
   const userBookingsInfo = Object.keys(userBookings).map(eventId => {
