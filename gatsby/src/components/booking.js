@@ -192,6 +192,11 @@ export default function Booking({ event }) {
     }
   }, [firestore, event.eventId]);
 
+  const preDurationMessage =
+    event.roundInfo.preDuration > 0
+      ? `ต้องมาถึงบริเวณกิจกรรม ก่อนรอบเวลาของตนเอง ${event.roundInfo.preDuration} นาที`
+      : "ต้องมาถึงบริเวณกิจกรรม ตรงเวลารอบเวลาของตนเอง";
+
   function bookRoundId(roundId, timeString) {
     if (userReady && config.bookingOpened && !config.bookingClosed) {
       const date = roundId < 200 ? "21" : "22";
@@ -228,10 +233,8 @@ export default function Booking({ event }) {
       <p className="mb-4">
         เปิดจองล่วงหน้ารอบละทั้งหมด {event.roundInfo.booking} คน
       </p>
-      <p>
-        {event.roundInfo.preDuration > 0
-          ? `ต้องมาถึงบริเวณกิจกรรม ก่อนรอบเวลาของตนเอง ${event.roundInfo.preDuration} นาที`
-          : "ต้องมาถึงบริเวณกิจกรรม ตรงเวลารอบเวลาของตนเอง"}
+      <p className="text-lg text-primary-600">
+        <strong className="font-medium">{preDurationMessage}</strong>
       </p>
       <div className="flex flex-wrap my-2 justify-around">
         <article className="w-full md:w-1/2">
