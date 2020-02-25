@@ -202,7 +202,7 @@ const AppPage = ({ location }) => {
             {firestoreUser.shortId}
           </p> */}
           <h1 className="text-2xl my-4">ลงทะเบียนสำเร็จแล้ว</h1>
-          {!config.bookingClosed ? (
+          {config.bookingClosed ? (
             <p className="my-4 leading-relaxed">
               การจองกิจกรรมล่วงหน้าสิ้นสุดลงแล้ว
               <br />
