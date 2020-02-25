@@ -158,36 +158,48 @@ exports.bookRoundId = functions
     const eventInfoRef = admin.firestore().doc(`eventsInfo/${data.eventId}`);
 
     return admin.firestore().runTransaction(transaction => {
-      return transaction.get(eventInfoRef).then(eventInfo => {
-        // Checking conditions
-        // Round is available
-        if (eventInfo.exists) {
-          const eventInfoData = eventInfo.data();
-          if (
-            eventInfoData.bookings &&
-            eventInfoData.bookings[data.roundId] &&
-            eventInfoData.bookings[data.roundId] >= bookingCapacity
-          ) {
-            return false;
+      const userBookings = transaction.get(userBookingsRef);
+      const eventInfo = transaction.get(eventInfoRef);
+      return Promise.all([userBookings, eventInfo]).then(
+        ([userBookings, eventInfo]) => {
+          // Checking conditions
+          // Round is available
+          if (eventInfo.exists) {
+            const eventInfoData = eventInfo.data();
+            if (
+              eventInfoData.bookings &&
+              eventInfoData.bookings[data.roundId] &&
+              eventInfoData.bookings[data.roundId] >= bookingCapacity
+            ) {
+              return false;
+            }
           }
+
+          // User hasn't booked yet
+          if (userBookings.exists) {
+            const userBookingsData = userBookings.data();
+            if (userBookingsData[data.eventId]) {
+              return false;
+            }
+          }
+
+          // Update eventInfo
+          const eventInfoUpdate = {
+            bookings: {}
+          };
+          eventInfoUpdate.bookings[
+            data.roundId
+          ] = admin.firestore.FieldValue.increment(1);
+          transaction.set(eventInfoRef, eventInfoUpdate, {
+            merge: true
+          });
+
+          // Update booking
+          const bookingData = {};
+          bookingData[data.eventId] = data.roundId;
+          transaction.set(userBookingsRef, bookingData, { merge: true });
+          return true;
         }
-
-        // Update eventInfo
-        const eventInfoUpdate = {
-          bookings: {}
-        };
-        eventInfoUpdate.bookings[
-          data.roundId
-        ] = admin.firestore.FieldValue.increment(1);
-        transaction.set(eventInfoRef, eventInfoUpdate, {
-          merge: true
-        });
-
-        // Update booking
-        const bookingData = {};
-        bookingData[data.eventId] = data.roundId;
-        transaction.set(userBookingsRef, bookingData, { merge: true });
-        return true;
-      });
+      );
     });
   });
