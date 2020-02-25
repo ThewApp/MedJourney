@@ -5,7 +5,6 @@ import React from "react";
 import useUser from "../stores/user";
 
 const Header = ({ siteTitle, siteShortTitle }) => {
-  const userSignout = useUser(state => state.signOut);
   const authUser = useUser(state => state.authUser);
   return (
     <header>
@@ -17,8 +16,8 @@ const Header = ({ siteTitle, siteShortTitle }) => {
           <Link to="/">{siteShortTitle}</Link>
         </h1>
         {authUser && (
-          <Link to="/" className="ml-auto" onClick={userSignout}>
-            ออกจากระบบ
+          <Link to="/app" className="ml-auto">
+            Profile
           </Link>
         )}
       </div>

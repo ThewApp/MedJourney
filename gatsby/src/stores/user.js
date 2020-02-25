@@ -7,6 +7,7 @@ const [useUser, api] = create(() => ({
   authUser: undefined,
   firestoreUser: undefined,
   firestoreUserRef: undefined,
+  userBookings: undefined,
   signOut: () => getFirebase(firebase => firebase.auth().signOut())
 }));
 
@@ -25,8 +26,10 @@ getFirebase(firebase =>
 );
 
 let firestoreUserListener;
+let userBookingsListener;
 function authUserListener(authUser) {
   if (firestoreUserListener) firestoreUserListener();
+  if (userBookingsListener) userBookingsListener();
   if (authUser) {
     getFirebase(firebase => {
       firestoreUserListener = firebase
@@ -45,9 +48,25 @@ function authUserListener(authUser) {
             });
           }
         });
+      userBookingsListener = firebase
+        .firestore()
+        .doc(`bookings/${authUser.uid}`)
+        .onSnapshot(docSnapshot => {
+          if (docSnapshot.exists) {
+            api.setState({
+              userBookings: docSnapshot.data()
+            });
+          } else {
+            api.setState({ userBookings: {} });
+          }
+        });
     });
   } else {
-    api.setState({ firestoreUser: null, firestoreUserRef: null });
+    api.setState({
+      firestoreUser: null,
+      firestoreUserRef: null,
+      userBookings: null
+    });
   }
 }
 

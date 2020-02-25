@@ -1,7 +1,9 @@
 @import "../fonts/index.css";
 
+/* purgecss start ignore */
 @import "tailwindcss/base";
 @import "tailwindcss/components";
+/* purgecss end ignore */
 
 @import "./spinner";
 @import "./markdown";

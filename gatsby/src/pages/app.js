@@ -1,11 +1,72 @@
 import React from "react";
-import { Link } from "gatsby";
+import { Link, useStaticQuery, graphql } from "gatsby";
 // import QRCode from "qrcode";
 
+import config from "../config";
 import Layout from "../components/layout";
 import SEO from "../components/seo";
 import Spinner from "../components/spinner";
 import useUser from "../stores/user";
+
+function UserBookingsList() {
+  const eventsData = useStaticQuery(graphql`
+    query {
+      allEventsYaml {
+        nodes {
+          eventId
+          eventName
+          eventPath
+          roundInfo {
+            name
+          }
+        }
+      }
+    }
+  `).allEventsYaml.nodes;
+
+  const userBookings = useUser(state => state.userBookings);
+  if (!userBookings) {
+    return null;
+  }
+  const userBookingsInfo = Object.keys(userBookings).map(eventId => {
+    const eventData = eventsData.find(
+      eventData => eventData.eventId === eventId
+    );
+    return eventData;
+  });
+
+  return (
+    <section className="shadow rounded text-left p-4 max-w-md mx-auto my-6">
+      <h2 className="text-xl font-medium">กิจกรรมที่จองแล้ว</h2>
+      <ul>
+        {userBookingsInfo.map(userBookingInfo => (
+          <li className="my-2" key={userBookingInfo.eventId}>
+            <Link
+              className="flex items-center"
+              to={`/events/${userBookingInfo.eventPath}#booked`}
+            >
+              <svg
+                className="fill-current w-1/12 mr-2 sm:mr-4"
+                viewBox="-21 -21 682.7 682.7"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path d="M323 388L603 81l37 33-315 345-171-163 34-36zm297-179l-39 43a270 270 0 11-81-133l33-37A318 318 0 0094 94a318 318 0 000 452 318 318 0 00452 0 318 318 0 0074-337zm0 0" />
+              </svg>
+              <div>
+                <h3 className="text-lg text-gray-900">
+                  {userBookingInfo.eventName}
+                </h3>
+                <p className="text-gray-700">
+                  {userBookingInfo.roundInfo.name}
+                </p>
+              </div>
+            </Link>
+          </li>
+        ))}
+      </ul>
+    </section>
+  );
+}
 
 const AppPage = ({ location }) => {
   const firestoreUser = useUser(state => state.firestoreUser);
@@ -141,11 +202,32 @@ const AppPage = ({ location }) => {
             {firestoreUser.shortId}
           </p> */}
           <h1 className="text-2xl my-4">ลงทะเบียนสำเร็จแล้ว</h1>
-          <p className="my-4">สามารถจองรอบกิจกรรม 26 - 29 กุมภาพันธ์นี้</p>
-          <Link to="/events" className="mb-2 block underline">
-            ดูกิจกรรม
+          {config.bookingClosed ? (
+            <p className="my-4 leading-relaxed">
+              การจองกิจกรรมล่วงหน้าสิ้นสุดลงแล้ว
+              <br />
+              ท่านยังคงสามารถเข้าร่วมกิจกรรมอื่น ๆ ได้โดยไม่ต้องจองล่วงหน้า
+            </p>
+          ) : (
+            <p className="my-4">
+              สามารถจองรอบกิจกรรมได้{" "}
+              <span className="whitespace-no-wrap">
+                {config.bookingOpened ? "วันนี้" : "วันที่ 26"} - 29 กุมภาพันธ์
+                2563
+              </span>
+            </p>
+          )}
+
+          <Link to="/events#all" className="mb-3 block underline">
+            ดูกิจกรรมทั้งหมด
           </Link>
-          <Link to="/" className="mb-2 block underline">
+          <Link to="/events#bookings" className="mb-3 block underline">
+            ดูกิจกรรมที่เปิดให้จองรอบ
+          </Link>
+
+          <UserBookingsList />
+
+          <Link to="/" className="mb-3 block underline">
             กลับหน้าหลัก
           </Link>
         </div>

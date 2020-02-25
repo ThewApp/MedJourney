@@ -14,7 +14,7 @@ class Firebase {
         await Promise.all([
           import(/* webpackChunkName: "firebase-auth" */ "firebase/auth"),
           import(
-            /* webpackChunkName: "firebase-firestore" */ "@firebase/firestore/dist/index.cjs.min"
+            /* webpackChunkName: "firebase-firestore" */ "@firebase/firestore"
           )
         ]);
         this.app = app;
