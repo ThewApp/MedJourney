@@ -11,17 +11,19 @@ exports.createPages = async ({ graphql, actions }) => {
     query {
       allEventsYaml {
         nodes {
+          eventId
           eventPath
         }
       }
     }
   `);
-  result.data.allEventsYaml.nodes.forEach(({ eventPath }) => {
+  result.data.allEventsYaml.nodes.forEach(({ eventId, eventPath }) => {
     actions.createPage({
       path: `/events/${eventPath}`,
       component: path.resolve(`./src/templates/event.js`),
       context: {
-        eventPath
+        eventPath,
+        eventLogoName: eventId.toLowerCase()
       }
     });
   });

@@ -9,9 +9,7 @@ import Booking from "../components/booking";
 
 export default ({ location, data }) => {
   const event = data.eventsYaml;
-  const logo = data.allFile.nodes.find(
-    file => file.name === event.eventId.toLowerCase()
-  );
+  const logo = data.allFile.nodes[0];
   return (
     <Layout location={location}>
       <SEO title={event.eventName} description={event.eventShortDescription} />
@@ -41,7 +39,7 @@ export default ({ location, data }) => {
 };
 
 export const query = graphql`
-  query($eventPath: String) {
+  query($eventPath: String, $eventLogoName: String) {
     eventsYaml(eventPath: { eq: $eventPath }) {
       eventId
       eventName
@@ -60,14 +58,18 @@ export const query = graphql`
         startTime
       }
     }
-    allFile(filter: { relativeDirectory: { eq: "events" } }) {
+    allFile(
+      filter: {
+        relativeDirectory: { eq: "events" }
+        name: { eq: $eventLogoName }
+      }
+    ) {
       nodes {
         childImageSharp {
           fixed(quality: 75, width: 150) {
             ...GatsbyImageSharpFixed
           }
         }
-        name
       }
     }
   }
