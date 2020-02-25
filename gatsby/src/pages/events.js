@@ -44,7 +44,7 @@ function EventCard({ event, logo, className }) {
         <div className="flex items-center justify-end">
           {event.roundInfo && (
             <Link
-              to={`/events/${event.eventPath}/#booking`}
+              to={`/events/${event.eventPath}#booking`}
               className={
                 "flex-auto text-center" +
                 (bookedRoundId ? " text-secondary-600" : " text-primary-600")
