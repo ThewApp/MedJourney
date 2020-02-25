@@ -178,7 +178,7 @@ export default function Booking({ event }) {
   const [bookingsInfo, setBookingsInfo] = useState();
 
   useEffect(() => {
-    if (firestore) {
+    if (firestore && config.bookingOpened && !config.bookingClosed) {
       firestore()
         .doc(`eventsInfo/${event.eventId}`)
         .get()
