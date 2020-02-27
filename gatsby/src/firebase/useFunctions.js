@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 
-import unpkgLoader from "../unpkgLoader";
+import cdnLoader from "../cdnLoader";
 import { getFirebase } from ".";
 
 /**
@@ -10,7 +10,7 @@ export default function() {
   const [functions, setFunctions] = useState({ value: null });
   useEffect(() => {
     getFirebase(firebase => {
-      unpkgLoader({
+      cdnLoader({
         name: "firebase-functions",
         url: "https://unpkg.com/firebase@7.9.1/firebase-functions.js"
       }).then(() => {

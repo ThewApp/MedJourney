@@ -1,4 +1,4 @@
-import unpkgLoader from "../unpkgLoader";
+import cdnLoader from "../cdnLoader";
 import { getFirebase } from ".";
 
 class Amplitude {
@@ -8,7 +8,7 @@ class Amplitude {
 
   init() {
     if (typeof window !== "undefined") {
-      unpkgLoader({
+      cdnLoader({
         name: "amplitude",
         url: "https://unpkg.com/amplitude-js@5.9.0/amplitude.js"
       }).then(amplitude => {
@@ -55,13 +55,13 @@ export const getAmplitude = amplitude.getAmplitude.bind(amplitude);
 
 export function initAnalytics() {
   getFirebase(firebase => {
-    unpkgLoader({
+    cdnLoader({
       name: "firebase-analytics",
       url: "https://unpkg.com/firebase@7.9.1/firebase-analytics.js"
     }).then(() => {
       firebase.analytics();
     });
-    unpkgLoader({
+    cdnLoader({
       name: "firebase-performance",
       url: "https://unpkg.com/firebase@7.9.1/firebase-performance.js"
     }).then(() => {
