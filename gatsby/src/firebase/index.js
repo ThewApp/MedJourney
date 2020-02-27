@@ -1,4 +1,4 @@
-import unpkgLoader from "../unpkgLoader";
+import cdnLoader from "../cdnLoader";
 
 class Firebase {
   constructor() {
@@ -8,18 +8,18 @@ class Firebase {
   init() {
     if (typeof window !== "undefined") {
       const firebaseConfig = JSON.parse(process.env.GATSBY_API_FIREBASE);
-      const app = unpkgLoader({
+      const app = cdnLoader({
         name: "firebase",
         url: "https://unpkg.com/firebase@7.9.1/firebase-app.js"
       });
       app.then(async app => {
         app.initializeApp(firebaseConfig);
         await Promise.all([
-          unpkgLoader({
+          cdnLoader({
             name: "firebase-auth",
             url: "https://unpkg.com/firebase@7.9.1/firebase-auth.js"
           }),
-          unpkgLoader({
+          cdnLoader({
             name: "firebase-firestore",
             url: "https://unpkg.com/firebase@7.9.1/firebase-firestore.js"
           })

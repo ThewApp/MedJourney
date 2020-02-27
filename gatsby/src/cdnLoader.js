@@ -1,6 +1,6 @@
 const loadedPackages = [];
 
-export default function unpkgLoader(pkg) {
+export default function cdnLoader(pkg) {
   if (typeof window === "undefined") {
     return Promise.resolve();
   }
@@ -17,6 +17,7 @@ export default function unpkgLoader(pkg) {
     const script = document.createElement("script");
     script.src = pkg.url;
     script.onload = () => {
+      if (loaded?.loading) delete loaded.loading;
       resolve(window[pkg.name]);
     };
     script.onerror = e => reject(e);
