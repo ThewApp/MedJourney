@@ -6,6 +6,7 @@ import Layout from "../components/layout";
 import SEO from "../components/seo";
 import Cover from "../components/cover";
 import useUser from "../stores/user";
+import Postponed from "../components/postponed";
 
 const IndexPage = ({ location }) => {
   const authUser = useUser(state => state.authUser);
@@ -13,6 +14,7 @@ const IndexPage = ({ location }) => {
     <Layout location={location}>
       <SEO title="Home" />
       <Cover />
+      <Postponed />
       <div className="container mx-auto flex flex-col sm:flex-row items-center justify-center mt-6">
         <div className="max-w-sm mx-4 my-6">
           <h1 className="text-lg md:text-2xl font-medium text-primary-700 mb-4">
@@ -32,7 +34,7 @@ const IndexPage = ({ location }) => {
               <span role="img" aria-label="Spiral Calendar">
                 🗓
               </span>{" "}
-              21 - 22 มีนาคม 2563
+              <del>21 - 22 มีนาคม 2563</del>
             </p>
           </div>
           <div className="px-6 py-6">
@@ -52,7 +54,7 @@ const IndexPage = ({ location }) => {
             เปิดลงทะเบียน
           </h1>
           <h2 className="text-xl md:text-2xl font-medium text-primary-700 mb-12">
-            วันนี้ - 22 มีนาคม 2563
+            วันนี้เป็นต้นไป
           </h2>
           {authUser ? (
             <Link
@@ -70,7 +72,7 @@ const IndexPage = ({ location }) => {
             </Link>
           )}
         </div>
-        <div className="max-w-sm mx-4 my-8 md:w-2/3">
+        {/* <div className="max-w-sm mx-4 my-8 md:w-2/3">
           <h1 className="text-2xl md:text-3xl font-medium text-primary-700 mb-4">
             {config.bookingClosed ? "กิจกรรมภายในงาน" : "เปิดจองกิจกรรม"}
           </h1>
@@ -101,7 +103,7 @@ const IndexPage = ({ location }) => {
               ดูกิจกรรม
             </Link>
           )}
-        </div>
+        </div> */}
         <svg
           className="w-16 m-4 md:m-6 md:w-32 lg:w-40 absolute right-0 bottom-0 fill-current text-gray-300"
           xmlns="http://www.w3.org/2000/svg"

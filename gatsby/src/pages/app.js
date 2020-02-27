@@ -7,6 +7,7 @@ import Layout from "../components/layout";
 import SEO from "../components/seo";
 import Spinner from "../components/spinner";
 import useUser from "../stores/user";
+import Postponed from "../components/postponed";
 
 function UserBookingsList() {
   const eventsData = useStaticQuery(graphql`
@@ -202,7 +203,10 @@ const AppPage = ({ location }) => {
             {firestoreUser.shortId}
           </p> */}
           <h1 className="text-2xl my-4">ลงทะเบียนสำเร็จแล้ว</h1>
-          {config.bookingClosed ? (
+
+          <Postponed />
+
+          {/* {config.bookingClosed ? (
             <p className="my-4 leading-relaxed">
               การจองกิจกรรมล่วงหน้าสิ้นสุดลงแล้ว
               <br />
@@ -216,7 +220,7 @@ const AppPage = ({ location }) => {
                 2563
               </span>
             </p>
-          )}
+          )} */}
 
           <Link to="/events#all" className="mb-3 block underline">
             ดูกิจกรรมทั้งหมด
@@ -225,7 +229,7 @@ const AppPage = ({ location }) => {
             ดูกิจกรรมที่เปิดให้จองรอบ
           </Link>
 
-          <UserBookingsList />
+          {/* <UserBookingsList /> */}
 
           <Link to="/" className="mb-3 block underline">
             กลับหน้าหลัก

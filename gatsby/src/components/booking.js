@@ -236,7 +236,7 @@ export default function Booking({ event }) {
       <p className="text-lg text-primary-600">
         <strong className="font-medium">{preDurationMessage}</strong>
       </p>
-      <div className="flex flex-wrap my-2 justify-around">
+      {/* <div className="flex flex-wrap my-2 justify-around">
         <article className="w-full md:w-1/2">
           <h3 className="mb-2 font-medium">21 มีนาคม 2563</h3>
           <RoundList
@@ -291,7 +291,7 @@ export default function Booking({ event }) {
           <br />
           ทุกท่านยังคงสามารถเข้าร่วมกิจกรรมนี้ ได้โดยไม่ต้องจองล่วงหน้า
         </div>
-      )}
+      )} */}
     </section>
   );
 }

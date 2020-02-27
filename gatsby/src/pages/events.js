@@ -42,7 +42,7 @@ function EventCard({ event, logo, className }) {
           </div>
         )}
         <div className="flex items-center justify-end">
-          {event.roundInfo && (
+          {/* {event.roundInfo && (
             <Link
               to={`/events/${event.eventPath}#booking`}
               className={
@@ -52,7 +52,7 @@ function EventCard({ event, logo, className }) {
             >
               {bookedRoundId ? "จองกิจกรรมย่อยนี้แล้ว" : "จองกิจกรรมย่อยนี้"}
             </Link>
-          )}
+          )} */}
           <Link
             to={`/events/${event.eventPath}`}
             className="text-primary-600 flex-auto flex-shrink-0 text-right"

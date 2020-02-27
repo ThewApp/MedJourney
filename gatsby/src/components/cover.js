@@ -16,7 +16,7 @@ import Img from "gatsby-image";
 const Cover = () => {
   const data = useStaticQuery(graphql`
     query {
-      coverImage: file(relativePath: { eq: "cover.png" }) {
+      coverImage: file(relativePath: { eq: "postponed.jpg" }) {
         childImageSharp {
           fluid(quality: 75, toFormat: JPG) {
             ...GatsbyImageSharpFluid
@@ -30,6 +30,7 @@ const Cover = () => {
     <Img
       className="w-100"
       loading="auto"
+      alt="ประกาศเลื่อนการจัดงาน “MDCU Open House : 2020”"
       fluid={{ ...data.coverImage.childImageSharp.fluid, sizes: "100vw" }}
     />
   );
