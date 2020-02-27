@@ -5,10 +5,10 @@ import Img from "gatsby-image";
 
 import Layout from "../components/layout";
 import SEO from "../components/seo";
-import useUser from "../stores/user";
+// import useUser from "../stores/user";
 
 function EventCard({ event, logo, className }) {
-  const bookedRoundId = useUser(state => state.userBookings)?.[event.eventId];
+  // const bookedRoundId = useUser(state => state.userBookings)?.[event.eventId];
   return (
     <div className={"p-4 shadow-md rounded-sm flex flex-col " + className}>
       <div className="flex items-center mb-4">

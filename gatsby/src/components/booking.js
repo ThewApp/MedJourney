@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from "react";
+import React /*useEffect, useState */ from "react";
+/*
 import { graphql, Link, useStaticQuery } from "gatsby";
 import moment from "moment";
 
@@ -120,8 +121,10 @@ function RoundList({
     </ul>
   );
 }
+*/
 
 export default function Booking({ event }) {
+  /*
   const eventsData = useStaticQuery(graphql`
     query {
       allEventsYaml {
@@ -191,12 +194,14 @@ export default function Booking({ event }) {
         });
     }
   }, [firestore, event.eventId]);
+  */
 
   const preDurationMessage =
     event.roundInfo.preDuration > 0
       ? `ต้องมาถึงบริเวณกิจกรรม ก่อนรอบเวลาของตนเอง ${event.roundInfo.preDuration} นาที`
       : "ต้องมาถึงบริเวณกิจกรรม ตรงเวลารอบเวลาของตนเอง";
 
+  /*
   function bookRoundId(roundId, timeString) {
     if (userReady && config.bookingOpened && !config.bookingClosed) {
       const date = roundId < 200 ? "21" : "22";
@@ -223,6 +228,7 @@ export default function Booking({ event }) {
       }
     }
   }
+  */
 
   return (
     <section className="py-4 max-w-screen-md mx-auto" id="booking">

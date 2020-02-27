@@ -1,14 +1,15 @@
 import React from "react";
-import { Link, useStaticQuery, graphql } from "gatsby";
+import { Link /* useStaticQuery, graphql */ } from "gatsby";
 // import QRCode from "qrcode";
 
-import config from "../config";
+// import config from "../config";
 import Layout from "../components/layout";
 import SEO from "../components/seo";
 import Spinner from "../components/spinner";
 import useUser from "../stores/user";
 import Postponed from "../components/postponed";
 
+/*
 function UserBookingsList() {
   const eventsData = useStaticQuery(graphql`
     query {
@@ -68,6 +69,7 @@ function UserBookingsList() {
     </section>
   );
 }
+*/
 
 const AppPage = ({ location }) => {
   const firestoreUser = useUser(state => state.firestoreUser);
