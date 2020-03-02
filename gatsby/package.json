@@ -22,7 +22,7 @@
     "react": "^16.12.0",
     "react-dom": "^16.12.0",
     "react-helmet": "^5.2.1",
-    "react-hook-form": "^4.9.8",
+    "react-hook-form": "^4.10.1",
     "react-markdown": "^4.3.1",
     "zustand": "^2.2.3"
   },
